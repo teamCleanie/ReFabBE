@@ -1,17 +1,23 @@
 package cleanie.refab.common.log.model;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class LoggingForm {
 
-    private final String apiUrl;
+    private String apiUrl;
 
-    private final String apiMethod;
+    private String apiMethod;
 
     private Long queryCounts = 0L;
 
     private Long queryTime = 0L;
+
+    public void setApiInfo(final String apiUrl, final String apiMethod) {
+        this.apiUrl = apiUrl;
+        this.apiMethod = apiMethod;
+    }
 
     public void queryExecuted(final Long queryTime) {
         queryCounts++;

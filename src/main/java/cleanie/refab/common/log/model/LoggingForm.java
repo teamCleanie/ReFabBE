@@ -22,4 +22,10 @@ public class LoggingForm {
         queryCounts++;
         this.queryTime += queryTime;
     }
+
+    @Override
+    public String toString() {
+        return String.format("API URL: %s | Method: %s | Query Count: %d | Query Time: %d ms",
+                apiUrl, apiMethod, queryCounts, queryTime);
+    }
 }

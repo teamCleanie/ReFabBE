@@ -1,9 +1,8 @@
 package cleanie.refab.common.log.model;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor
+@Getter
 public class LoggingForm {
 
     private String apiUrl;

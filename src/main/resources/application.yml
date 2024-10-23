@@ -2,17 +2,11 @@ spring:
   application:
     name: refab
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/yourdatabase
-    username: youruser
-    password: yourpassword
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-
 decorator:
   datasource:
     p6spy:
       enable-logging: true
+
+logging:
+  discord:
+    webhook-uri: ${DISCORD_WEBHOOK_URL}

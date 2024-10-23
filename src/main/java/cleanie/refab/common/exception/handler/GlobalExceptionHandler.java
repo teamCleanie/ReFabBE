@@ -4,6 +4,7 @@ import static cleanie.refab.common.exception.model.ExceptionCode.INVALID_REQUEST
 import static cleanie.refab.common.exception.model.ExceptionCode.INTERNAL_SERVER_ERROR;
 
 import cleanie.refab.common.exception.BadRequestException;
+import cleanie.refab.common.exception.DiscordWebhookException;
 import cleanie.refab.common.exception.model.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(DiscordWebhookException.class)
+    public ResponseEntity<ExceptionResponse> handleDiscordWebhookException(final DiscordWebhookException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.internalServerError()
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 

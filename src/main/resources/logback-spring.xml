@@ -26,7 +26,7 @@
         </encoder>
     </appender>
 
-    <appender name="DISCORD" class="cleanie.refab.common.log.alert.DiscordAppender">
+    <appender name="DISCORD" class="cleanie.repatch.common.log.alert.DiscordAppender">
         <webhookUrl>${DISCORD_WEBHOOK_URL}</webhookUrl>
     </appender>
 

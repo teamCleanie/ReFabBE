@@ -1,4 +1,4 @@
-package cleanie.refab.common.s3.config;
+package cleanie.repatch.common.s3.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

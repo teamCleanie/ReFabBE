@@ -1,4 +1,4 @@
-package cleanie.refab.common.s3.helper;
+package cleanie.repatch.common.s3.helper;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

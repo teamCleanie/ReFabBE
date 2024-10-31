@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: refab
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+logging:
+  discord:
+    webhook-uri: ${DISCORD_WEBHOOK_URL}

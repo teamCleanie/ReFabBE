@@ -19,10 +19,6 @@ spring:
 
 decorator:
   datasource:
-#    driver-class-name: ${POSTGRESQL_DRIVER}
-#    url: ${POSTGRE_URL}
-#    username: ${POSTGRE_USERNAME}
-#    password: ${POSTGRE_PASSWORD}
     p6spy:
       enable-logging: true
 

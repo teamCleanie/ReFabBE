@@ -25,3 +25,13 @@ decorator:
 logging:
   discord:
     webhook-uri: ${DISCORD_WEBHOOK_URL}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static-region: ${AWS_REGION}

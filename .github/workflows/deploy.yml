@@ -52,6 +52,20 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
+    - name: Get allowed IP ranges
+      id: ip_ranges
+      run: |
+        ACTIONS_RUNNER_IP=$(curl -s https://api.github.com/meta | jq -r '.actions[]' | grep -E '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}$' | head -n 1)
+        echo "runner_ip=$ACTIONS_RUNNER_IP" >> $GITHUB_OUTPUT
+
+    - name: Add IP to security group
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ steps.ip_ranges.outputs.runner_ip }}
+    
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
@@ -75,5 +89,13 @@ jobs:
             -e AWS_REGION=${{ secrets.AWS_REGION }} \
             ${{ env.image }}
           docker system prune -f
-        
+
+    - name: Remove IP from security group
+      if: always()
+      run: |
+        aws ec2 revoke-security-group-ingress \
+          --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ steps.ip_ranges.outputs.runner_ip }}
     

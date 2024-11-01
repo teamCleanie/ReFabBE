@@ -1,9 +1,9 @@
 package cleanie.repatch.common.s3.helper;
 
+import cleanie.repatch.common.s3.config.AwsS3Properties;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,10 +16,8 @@ public class S3FileManager {
     private final String BUCKET_NAME;
     private final AmazonS3 amazonS3Client;
 
-    public S3FileManager(
-            @Value("${cloud.aws.s3.bucket}") String BUCKET_NAME,
-            AmazonS3 amazonS3) {
-        this.BUCKET_NAME = BUCKET_NAME;
+    public S3FileManager(AwsS3Properties awsS3Properties, AmazonS3 amazonS3) {
+        this.BUCKET_NAME = awsS3Properties.getBucket();
         this.amazonS3Client = amazonS3;
     }
 

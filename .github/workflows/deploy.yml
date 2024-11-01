@@ -52,11 +52,10 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
-    - name: Get allowed IP ranges
-      id: ip_ranges
+    - name: Get current IP
+      id: ip
       run: |
-        ACTIONS_RUNNER_IP=$(curl -s https://api.github.com/meta | jq -r '.actions[] | select(startswith("4."))' | head -n1)
-        echo "runner_ip=$ACTIONS_RUNNER_IP" >> $GITHUB_OUTPUT
+        echo "runner_ip=$(curl -s https://api.ipify.org)/32" >> $GITHUB_OUTPUT
 
     - name: Add IP to security group
       run: |
@@ -64,7 +63,7 @@ jobs:
           --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
           --protocol tcp \
           --port 22 \
-          --cidr ${{ steps.ip_ranges.outputs.runner_ip }}
+          --cidr ${{ steps.ip.outputs.runner_ip }}
     
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
@@ -99,5 +98,5 @@ jobs:
           --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
           --protocol tcp \
           --port 22 \
-          --cidr ${{ steps.ip_ranges.outputs.runner_ip }}
+          --cidr ${{ steps.ip.outputs.runner_ip }}
     

@@ -34,4 +34,4 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_ACCESS_KEY}
     region:
-      static: ${AWS_REGION}
+      static-region: ${AWS_REGION}

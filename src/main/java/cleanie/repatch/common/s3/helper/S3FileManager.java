@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.net.URL;
 
 @Component
-public class S3Uploader {
+public class S3FileManager {
 
     private final String BUCKET_NAME;
     private final AmazonS3 amazonS3Client;
 
-    public S3Uploader(
+    public S3FileManager(
             @Value("${cloud.aws.s3.bucket}") String BUCKET_NAME,
             AmazonS3 amazonS3) {
         this.BUCKET_NAME = BUCKET_NAME;

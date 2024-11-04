@@ -76,8 +76,6 @@ jobs:
         if: always()
         with:
           name: JUnit Tests
-          path: |
-            **/test-results/**/TEST-*.xml
-            **/build/test-results/**/*.xml
+          path: build/test-results/ciTest/**/*.xml
           reporter: java-junit
           fail-on-error: false

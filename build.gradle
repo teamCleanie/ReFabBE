@@ -46,10 +46,15 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task ciTest(type: Test) {
+tasks.register('ciTest', Test) {
     useJUnitPlatform() {
         includeTags 'unit', 'acceptance'
         excludeTags 'integration'
+    }
+
+    reports {
+        junitXml.enabled = true
+        html.enabled = false
     }
 }
 

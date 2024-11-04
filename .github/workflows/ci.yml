@@ -79,7 +79,3 @@ jobs:
           reporter: java-junit
           fail-on-error: false
 
-      - name: List Test Report Files
-        run: |
-          echo "=== Test Results Directory Structure ==="
-          find build/test-results -type f

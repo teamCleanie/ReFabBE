@@ -44,17 +44,6 @@ jobs:
           ./gradlew clean ciTest --info
         continue-on-error: true
 
-      - name: List Test Report Files
-        run: |
-          echo "=== Test Results Directory Structure ==="
-          find build/test-results -type f
-
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: build/test-results/ciTest/TEST-*.xml
-
       - name: SonarQube Analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,14 +68,4 @@ jobs:
             **/build/test-results/**/*.xml
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: JUnit Tests
-          path: |
-            build/test-results/ciTest/TEST-*.xml
-            build/test-results/**/TEST-*.xml
-          reporter: java-junit
-          fail-on-error: false
 

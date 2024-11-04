@@ -46,7 +46,7 @@ jobs:
           ./gradlew sonar \
             -Dsonar.scm.provider=git \
             -Dsonar.projectKey=teamCleanie_ReFabBE \
-            -Dsonar.organization=teamCleanie \
+            -Dsonar.organization=teamcleanie \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.branch.name=${{ github.head_ref }} \

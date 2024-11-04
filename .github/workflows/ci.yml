@@ -51,12 +51,13 @@ jobs:
         if: always()
         with:
           files: |
-            build/test-results/**/*.xml
+            build/test-results/**/TEST-*.xml
 
       - name: Test Report
         uses: dorny/test-reporter@v1
-        if: failure()
+        if: always()
         with:
           name: Test Results
-          path: build/test-results/**/*.xml
+          path: build/test-results/**/TEST-*.xml
           reporter: java-junit
+          fail-on-error: false

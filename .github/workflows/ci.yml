@@ -49,6 +49,12 @@ jobs:
           echo "=== Test Results Directory Structure ==="
           find build/test-results -type f
 
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: build/test-results/ciTest/TEST-*.xml
+
       - name: SonarQube Analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -58,10 +58,10 @@ tasks.register('ciTest', Test) {
         excludeTags 'integration'
     }
 
-    reports.junitXml.required.set(true)
-    reports.html.required.set(false)
-
-    finalizedBy tasks.jacocoTestReport
+    reports {
+        junitXml.required.set(true)
+        html.required.set(false)
+    }
 }
 
 tasks.jacocoTestReport {

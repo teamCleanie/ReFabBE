@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class RepatchApplicationTests {
 
     @IntegrationTest
+    @Test
     void contextLoads() {
     }
 

@@ -42,10 +42,6 @@ jobs:
       - name: Build and Run Tests
         run: |
           ./gradlew clean ciTest --info
-          echo "=== Test Results Directory Structure ==="
-          find build/test-results -type f
-          echo "=== Test Results Content ==="
-          ls -R build/test-results/ciTest/
         continue-on-error: true
 
       - name: SonarQube Analysis
@@ -53,8 +49,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew build
           ./gradlew sonar \
+            -Dsonar.java.binaries=build/classes/java/main \
             -Dsonar.scm.provider=git \
             -Dsonar.projectKey=teamCleanie_ReFabBE \
             -Dsonar.organization=teamcleanie \
@@ -62,7 +58,6 @@ jobs:
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.branch.name=${{ github.head_ref }} \
             -Dsonar.gradle.skipCompile=true
-          -Dsonar.java.binaries=build/classes
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2

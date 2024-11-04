@@ -52,10 +52,8 @@ tasks.register('ciTest', Test) {
         excludeTags 'integration'
     }
 
-    reports {
-        junitXml.enabled = true
-        html.enabled = false
-    }
+    reports.junitXml.required.set(true)
+    reports.html.required.set(false)
 }
 
 sonar {

@@ -44,6 +44,11 @@ jobs:
           ./gradlew clean ciTest --info
         continue-on-error: true
 
+      - name: List Test Report Files
+        run: |
+          echo "=== Test Results Directory Structure ==="
+          find build/test-results -type f
+
       - name: SonarQube Analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

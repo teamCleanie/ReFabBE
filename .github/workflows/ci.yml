@@ -40,7 +40,12 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build and Run Tests
-        run: ./gradlew clean ciTest
+        run: |
+          ./gradlew clean ciTest --info
+          echo "=== Test Results Directory Structure ==="
+          find build/test-results -type f
+          echo "=== Test Results Content ==="
+          ls -R build/test-results/ciTest/
         continue-on-error: true
 
       - name: SonarQube Analysis
@@ -62,7 +67,8 @@ jobs:
         if: always()
         with:
           files: |
-            build/test-results/ciTest/TEST-*.xml
+            **/test-results/**/TEST-*.xml
+            **/build/test-results/**/*.xml
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Report
@@ -70,6 +76,8 @@ jobs:
         if: always()
         with:
           name: JUnit Tests
-          path: build/test-results/ciTest/TEST-*.xml
+          path: |
+            **/test-results/**/TEST-*.xml
+            **/build/test-results/**/*.xml
           reporter: java-junit
           fail-on-error: false

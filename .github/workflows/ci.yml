@@ -41,7 +41,7 @@ jobs:
 
       - name: Build and Run Tests
         run: |
-          ./gradlew clean ciTest --info
+          ./gradlew clean ciTest
         continue-on-error: true
 
       - name: SonarQube Analysis

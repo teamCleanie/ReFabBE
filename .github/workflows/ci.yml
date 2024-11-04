@@ -54,7 +54,7 @@ jobs:
             build/test-results/**/*.xml
 
       - name: Test Report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v1
         if: failure()
         with:
           name: Test Results

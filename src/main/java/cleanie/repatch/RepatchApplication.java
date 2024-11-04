@@ -9,5 +9,4 @@ public class RepatchApplication {
     public static void main(String[] args) {
         SpringApplication.run(RepatchApplication.class, args);
     }
-
 }

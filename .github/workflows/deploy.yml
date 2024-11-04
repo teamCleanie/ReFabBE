@@ -2,9 +2,8 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main", "setting/241101-#4-cicd-파이프라인-구축" ]
-  workflow_dispatch:
-
+    branches: [ "main" ]
+    
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}

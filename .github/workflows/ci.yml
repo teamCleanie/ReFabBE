@@ -62,13 +62,14 @@ jobs:
         if: always()
         with:
           files: |
-            build/test-results/**/TEST-*.xml
+            build/test-results/test/TEST-*.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: JUnit Tests
-          path: build/test-results/**/TEST-*.xml
+          path: build/test-results/test/TEST-*.xml
           reporter: java-junit
           fail-on-error: false

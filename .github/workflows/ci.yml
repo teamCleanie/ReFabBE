@@ -40,7 +40,17 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build and Run Tests
-        run: ./gradlew clean ciTest
+        run: |
+          ./gradlew clean ciTest --info
+          echo "=== Project Root ==="
+          ls -la
+          echo "=== Build Directory ==="
+          ls -la build/
+          echo "=== Test Results Directory ==="
+          ls -la build/test-results/ || echo "No test-results directory"
+          echo "=== Test Directory ==="
+          ls -la build/test-results/test/ || echo "No test directory"
+          find . -name "TEST-*.xml" || echo "No test XML files found"
         continue-on-error: true
 
       - name: SonarQube Analysis

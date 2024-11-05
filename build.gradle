@@ -25,6 +25,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExt
 }
 
 repositories {
@@ -68,7 +69,26 @@ dependencies {
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.4'
 }
 
+
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+openapi {
+    host = 'localhost:8080'
+    basePath = '/'
+    title = 'Repatch API 문서'
+    description = 'Spring REST Docs로 생성한 API 문서입니다.'
+    version = '1.0.0'
+    format = 'yaml'
+    outputDirectory = file("${layout.buildDirectory.get()}/resources/main/static/docs")
+    outputFileNamePrefix = 'openapi3'
+    separatePublicApi = true
+}
+
 tasks.named('test') {
+    outputs.dir snippetsDir
     useJUnitPlatform()
     finalizedBy tasks.jacocoTestReport
 }
@@ -103,5 +123,16 @@ sonar {
         property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
         property "sonar.junit.reportPaths", "${layout.buildDirectory.get()}/test-results/test"
         property "sonar.alm.enabled", "false"
+    }
+}
+
+tasks.register('generateOpenApi') {
+    dependsOn test
+    group = 'documentation'
+    doLast {
+        copy {
+            from "${layout.buildDirectory.get()}/resources/main/static/docs"
+            into "src/main/resources/static/docs"
+        }
     }
 }

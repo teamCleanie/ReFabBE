@@ -10,6 +10,11 @@ spring:
       ddl-auto: create
     show-sql: true
 
+  cloud:
+    aws:
+      s3:
+        enabled: false
+
 logging:
   discord:
     webhook-uri: "test"

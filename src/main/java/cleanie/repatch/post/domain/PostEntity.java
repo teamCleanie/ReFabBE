@@ -40,7 +40,8 @@ public class PostEntity {
     @Embedded
     private final TransactionTypes transactionTypes;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
     private final List<PhotoEntity> photos;
 
     @CreatedDate

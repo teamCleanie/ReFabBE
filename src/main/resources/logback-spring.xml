@@ -14,7 +14,7 @@
     <property name="LOG_FILE" value="logs/app.log"/>
     <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
 
-    <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-uri"/>
+    <springProperty scope="context" name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-uri" defaultValue="http://default-webhook-url"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

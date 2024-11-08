@@ -1,12 +1,14 @@
 package cleanie.repatch.common.s3.config;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Getter
 @ConfigurationProperties(prefix = "cloud.aws")
 public class AwsS3Properties {
+
     private final Region region;
-    @Getter
     private final String bucket;
     private final Credentials credentials;
 
@@ -16,15 +18,22 @@ public class AwsS3Properties {
         this.credentials = credentials;
     }
 
-    public String getAccessKey(){
+    @PostConstruct
+    public void checkAwsS3Properties() {
+        System.out.println("Region: " + getRegion());
+        System.out.println("Credentials: "+ (credentials.accessKey!=null));
+        System.out.println("Bucket: " + bucket);
+    }
+
+    public String getAccessKey() {
         return credentials.getAccessKey();
     }
 
-    public String getSecretKey(){
+    public String getSecretKey() {
         return credentials.getSecretKey();
     }
 
-    public String getRegion(){
+    public String getRegion() {
         return region.getStaticRegion();
     }
 
@@ -40,11 +49,10 @@ public class AwsS3Properties {
     }
 
     @Getter
-    @ConfigurationProperties(prefix = "cloud.aws.region")
     public static class Region {
         private final String staticRegion;
 
-        public Region(String staticRegion){
+        public Region(String staticRegion) {
             this.staticRegion = staticRegion;
         }
     }

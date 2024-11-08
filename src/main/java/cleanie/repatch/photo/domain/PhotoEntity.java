@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "photo")
 @Builder(toBuilder = true)
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class PhotoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
-    private final String imageUrl;
+    private Long id;
+    private String imageUrl;
     private Long postId;
 
     @CreatedDate
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

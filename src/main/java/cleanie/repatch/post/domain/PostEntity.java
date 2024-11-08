@@ -15,37 +15,37 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "post")
 @Builder(toBuilder = true)
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
-    private final PostType postType;
+    private PostType postType;
 
     @Enumerated(EnumType.STRING)
-    private final FabricType fabricType;
+    private FabricType fabricType;
 
-    private final String title;
-    private final String unit;
-    private final String price;
-    private final String content;
-    private final Boolean isPublished;
+    private String title;
+    private String unit;
+    private String price;
+    private String content;
+    private Boolean isPublished;
 
     @Embedded
-    private final TransactionTypes transactionTypes;
+    private TransactionTypes transactionTypes;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
-    private final List<PhotoEntity> photos;
+    private List<PhotoEntity> photos;
 
     @CreatedDate
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 }

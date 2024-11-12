@@ -5,5 +5,6 @@ import cleanie.repatch.user.model.OAuthUserInfo;
 
 public interface OAuthApiClient {
     OAuthProvider getProvider();
+
     OAuthUserInfo getUserInfo(String accessToken);
 }

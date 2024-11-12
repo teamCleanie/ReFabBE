@@ -10,8 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    public WebClient
-    kakaoWebClient() {
+    public WebClient kakaoWebClient() {
         return WebClient.builder()
                 .baseUrl("https://kapi.kakao.com")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)

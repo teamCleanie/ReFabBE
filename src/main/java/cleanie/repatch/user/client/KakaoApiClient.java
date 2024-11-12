@@ -7,6 +7,7 @@ import cleanie.repatch.user.model.OAuthUserInfo;
 import cleanie.repatch.user.model.response.KakaoUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -14,18 +15,19 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 import static cleanie.repatch.common.exception.model.ExceptionCode.INVALID_OAUTH_TOKEN;
 import static cleanie.repatch.common.exception.model.ExceptionCode.OAUTH_API_ERROR;
 
 @Component
-@RequiredArgsConstructor
 public class KakaoApiClient implements OAuthApiClient {
 
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
     private final WebClient kakaoWebClient;
+
+    public KakaoApiClient(@Qualifier("kakaoWebClient") WebClient webClient) {
+        this.kakaoWebClient = webClient;
+    }
 
     @Override
     public OAuthProvider getProvider() {

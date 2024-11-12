@@ -3,7 +3,6 @@ package cleanie.repatch.common.security.component;
 import cleanie.repatch.common.security.annotation.Auth;
 import cleanie.repatch.common.security.domain.Accessor;
 import cleanie.repatch.user.repository.UserRepository;
-import io.micrometer.common.lang.NonNullApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -15,6 +14,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
@@ -39,9 +41,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     private String extractToken(NativeWebRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_TOKEN_PREFIX)) {
+            return bearerToken.substring(BEARER_TOKEN_PREFIX.length());
         }
         return "";
     }

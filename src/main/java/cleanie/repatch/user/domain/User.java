@@ -1,5 +1,6 @@
 package cleanie.repatch.user.domain;
 
+import cleanie.repatch.user.model.OAuthProvider;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,28 +16,24 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     @Column(nullable = false)
     private String name;
 
     private String imageUrl;
 
     @Column(nullable = false)
-    private String providerId;
+    private OAuthProvider provider;
+
+    @Column(nullable = false)
+    private String socialLoginId;
 
     private String refreshToken;
 
-    @Enumerated(EnumType.STRING)
-    @Column(insertable = false, updatable = false)
-    private UserType userType;
-
-    protected User(String email, String name, String imageUrl, String providerId) {
-        this.email = email;
+    protected User(String name, String imageUrl, OAuthProvider provider, String socialLoginId) {
         this.name = name;
         this.imageUrl = imageUrl;
-        this.providerId = providerId;
+        this.provider = provider;
+        this.socialLoginId = socialLoginId;
     }
 
     public void updateRefreshToken(String refreshToken) {

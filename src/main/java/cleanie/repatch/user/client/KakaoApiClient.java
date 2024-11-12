@@ -4,6 +4,7 @@ import cleanie.repatch.common.exception.InvalidTokenException;
 import cleanie.repatch.common.exception.OAuthApiException;
 import cleanie.repatch.user.model.OAuthProvider;
 import cleanie.repatch.user.model.OAuthUserInfo;
+import cleanie.repatch.user.model.request.OAuthLoginRequest;
 import cleanie.repatch.user.model.response.KakaoUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
@@ -35,7 +36,8 @@ public class KakaoApiClient implements OAuthApiClient {
     }
 
     @Override
-    public OAuthUserInfo getUserInfo(String accessToken) {
+    public OAuthUserInfo getUserInfo(OAuthLoginRequest request) {
+        String accessToken = request.getAccessToken();
         try {
             KakaoUserResponse response = kakaoWebClient.get()
                     .uri("/v2/user/me")

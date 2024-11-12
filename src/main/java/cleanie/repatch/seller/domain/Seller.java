@@ -2,6 +2,7 @@ package cleanie.repatch.seller.domain;
 
 import cleanie.repatch.user.domain.User;
 import cleanie.repatch.user.domain.UserType;
+import cleanie.repatch.user.model.OAuthProvider;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
@@ -14,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seller extends User {
 
-    public Seller(String email, String name, String imageUrl, String providerId) {
-        super(email, name, imageUrl, providerId);
+    public Seller(String name, String imageUrl, OAuthProvider provider, String socialLoginId) {
+        super(name, imageUrl, provider, socialLoginId);
     }
 
     @Override

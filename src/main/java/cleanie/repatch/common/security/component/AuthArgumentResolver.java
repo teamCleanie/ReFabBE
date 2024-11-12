@@ -42,10 +42,14 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     private String extractToken(NativeWebRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(BEARER_TOKEN_PREFIX)) {
+        if (isBearerToken(bearerToken)) {
             return bearerToken.substring(BEARER_TOKEN_PREFIX.length());
         }
         return "";
+    }
+
+    private boolean isBearerToken(String token) {
+        return token != null && token.startsWith(BEARER_TOKEN_PREFIX);
     }
 
     private boolean isValidToken(String token) {

@@ -5,8 +5,7 @@ import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.photo.domain.PhotoEntity;
 import cleanie.repatch.photo.service.PostPhotoManager;
 import cleanie.repatch.post.domain.PostEntity;
-import cleanie.repatch.post.domain.enums.FabricType;
-import cleanie.repatch.post.domain.enums.TransactionTypes;
+import cleanie.repatch.post.model.PostIdResponse;
 import cleanie.repatch.post.model.PostRequest;
 import cleanie.repatch.post.model.PostResponse;
 import cleanie.repatch.post.repository.PostRepository;
@@ -25,7 +24,8 @@ public class PostService {
     private final PostConverter postConverter;
     private final PostValidator postValidator;
 
-    public PostResponse viewSinglePost(Long postId){
+    @Transactional
+    public PostResponse viewPost(Long postId){
         PostEntity post = postRepository.findById(postId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.INVALID_REQUEST));
 
@@ -33,7 +33,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse savePost(PostRequest request, boolean isPublished){
+    public PostIdResponse savePost(PostRequest request, boolean isPublished){
         // 게시글 작성일 때만 검증
         if (isPublished){
             postValidator.validatePostRequest(request);
@@ -43,44 +43,28 @@ public class PostService {
         PostEntity post = postRepository.save(postConverter.toPostEntity(request, isPublished));
         List<PhotoEntity> photos = post.getPhotos();
         postPhotoManager.addPostIdToPhotoEntities(photos, post.getId());
-        return postConverter.toPostResponse(post);
+
+        return postConverter.toPostIdResponse(post.getId());
     }
 
     @Transactional
-    public PostResponse updatePost(PostRequest request, Long postId, boolean isPublished){
+    public PostIdResponse updatePost(PostRequest request, Long postId, boolean isPublished){
         PostEntity originalPost = postRepository.findById(postId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.INVALID_REQUEST));
 
-        List<PhotoEntity> photos = postPhotoManager.getPhotoEntitiesFromIds(request.photoIds());
-        List<PhotoEntity> updatedPhotos = photos.stream()
-                .filter(photo -> photo.getPostId() == null)
-                .map(photo -> postPhotoManager.addPostIdToPhotoEntity(photo, originalPost.getId()))
-                .toList();
-
-        PostEntity editedPost = originalPost.toBuilder()
-                .title(request.title())
-                .fabricType(FabricType.getTypeByString(request.fabricType()))
-                .unit(request.unit())
-                .price(request.price())
-                .content(request.content())
-                .isPublished(isPublished)
-                .transactionTypes(TransactionTypes.updateTransactionTypesWithString(
-                        originalPost.getTransactionTypes(), request.transactionTypes()))
-                .photos(updatedPhotos)
-                .build();
-
+        List<PhotoEntity> updatedPhotos = postPhotoManager.updatePostIds(originalPost.getId(), request);
+        PostEntity editedPost = postConverter.toEditedPostEntity(originalPost, request, isPublished, updatedPhotos);
         PostEntity updatedPost = postRepository.save(editedPost);
 
-        return postConverter.toPostResponse(updatedPost);
+        return postConverter.toPostIdResponse(updatedPost.getId());
     }
 
     @Transactional
-    public boolean deletePostIfExistsById(Long postId){
-        if (postRepository.existsById(postId)){
-            postRepository.deleteById(postId);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean deletePostById(Long postId) {
+
+        return postRepository.findById(postId)
+                .map(post -> { postRepository.delete(post);
+                    return true;
+                }).orElse(false);
     }
 }

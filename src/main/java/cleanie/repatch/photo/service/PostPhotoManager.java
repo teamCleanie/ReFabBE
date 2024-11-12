@@ -4,11 +4,12 @@ import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.photo.domain.PhotoEntity;
 import cleanie.repatch.photo.repository.PhotoRepository;
+import cleanie.repatch.post.model.PostRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class PostPhotoManager {
         return photoIds.stream()
                 .map(id -> photoRepository.findById(id)
                         .orElseThrow(() -> new BadRequestException(ExceptionCode.INVALID_REQUEST)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void addPostIdToPhotoEntities(List<PhotoEntity> photoEntities, Long postId) {
@@ -40,6 +41,23 @@ public class PostPhotoManager {
 
         return photoEntities.stream()
                 .map(PhotoEntity::getImageUrl)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    public List<PhotoEntity> updatePostIds(Long postId, PostRequest request) {
+        List<PhotoEntity> photos = getPhotoEntitiesFromIds(request.photoIds());
+        List<PhotoEntity> updatedPhotos = new ArrayList<>();
+        List<PhotoEntity> existingPhotos = new ArrayList<>();
+
+        for (PhotoEntity photo : photos) {
+            if (photo.getPostId() == null) {
+                updatedPhotos.add(addPostIdToPhotoEntity(photo, postId));
+            } else {
+                existingPhotos.add(photo);
+            }
+        }
+            updatedPhotos.addAll(existingPhotos);
+
+            return updatedPhotos;
     }
 }

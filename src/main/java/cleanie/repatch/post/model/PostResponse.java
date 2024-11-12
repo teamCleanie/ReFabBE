@@ -16,7 +16,7 @@ public record PostResponse(
         String price,
         String content,
         Set<String> tradeTypes,
-        Boolean isDraft,
+        Boolean isPublished,
         List<String> photos,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt

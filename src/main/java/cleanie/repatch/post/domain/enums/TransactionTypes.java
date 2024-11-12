@@ -17,6 +17,10 @@ public class TransactionTypes {
     @Enumerated(EnumType.STRING)
     private final Set<TransactionType> transactionTypes;
 
+    public TransactionTypes() {
+        this.transactionTypes = new HashSet<>();
+    }
+
     public static Set<String> getStringFromTransactionTypes(TransactionTypes transactionTypes){
         Set<String> types = new HashSet<>();
         for (TransactionType transactionType : transactionTypes.transactionTypes){
@@ -38,7 +42,7 @@ public class TransactionTypes {
     public static TransactionTypes updateTransactionTypesWithString(
             TransactionTypes transactions, Set<String> transactionTypes){
         Set<TransactionType> types = transactions.transactionTypes;
-        types.clear(); // set 비우고 수정된 set
+        types.clear();
 
         for (String transactionType : transactionTypes){
             types.add(TransactionType.getTypeByString(transactionType));

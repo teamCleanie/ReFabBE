@@ -42,4 +42,6 @@ public abstract class User {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public abstract UserType getUserType();
 }

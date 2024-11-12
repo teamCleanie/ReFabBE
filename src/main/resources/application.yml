@@ -33,3 +33,5 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_ACCESS_KEY}
     region: ${AWS_REGION}
+    cloudfront:
+      domain: ${AWS_CLOUDFRONT_DOMAIN}

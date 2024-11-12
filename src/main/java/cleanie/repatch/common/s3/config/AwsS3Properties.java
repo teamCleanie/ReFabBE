@@ -40,7 +40,6 @@ public class AwsS3Properties {
     }
 
     @Getter
-    @ConfigurationProperties(prefix = "cloud.aws.region")
     public static class Region {
         private final String staticRegion;
 

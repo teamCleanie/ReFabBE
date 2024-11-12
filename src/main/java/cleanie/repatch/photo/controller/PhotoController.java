@@ -5,7 +5,9 @@ import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.photo.model.PhotoResponse;
 import cleanie.repatch.photo.model.PhotoUploadRequest;
 import cleanie.repatch.photo.service.PhotoService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +21,15 @@ public class PhotoController {
 
     private final PhotoService photoService;
 
-    // 사진 저장
-    @PostMapping
+    @Operation(summary = "사진 업로드", description = "사진을 s3에 업로드하고, 사진 id와 url을 반환합니다.")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PhotoResponse>> uploadPhotos(
-            @RequestBody PhotoUploadRequest request) throws IOException {
+            @ModelAttribute PhotoUploadRequest request) throws IOException {
         List<PhotoResponse> responses = photoService.uploadAndSavePhotos(request);
         return ResponseEntity.ok(responses);
     }
 
-    // 사진 삭제(1개씩)
+    @Operation(summary = "사진 삭제", description = "사진(1장)을 삭제합니다.")
     @DeleteMapping("/{photo_id}")
     public ResponseEntity<Void> deletePhoto(
             @PathVariable(name = "photo_id") Long photoId){

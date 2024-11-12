@@ -11,11 +11,13 @@ public class AwsS3Properties {
     private final Region region;
     private final String bucket;
     private final Credentials credentials;
+    private final String cloudfront;
 
-    public AwsS3Properties(Region region, String bucket, Credentials credentials){
+    public AwsS3Properties(Region region, String bucket, Credentials credentials, String cloudfront){
         this.region = region;
         this.bucket = bucket;
         this.credentials = credentials;
+        this.cloudfront = cloudfront;
     }
 
     @PostConstruct

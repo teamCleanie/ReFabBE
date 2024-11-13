@@ -1,5 +1,6 @@
 package cleanie.repatch.user.service;
 
+import cleanie.repatch.common.exception.EntityNotFoundException;
 import cleanie.repatch.common.security.component.JwtTokenProvider;
 import cleanie.repatch.user.client.OAuthApiClient;
 import cleanie.repatch.user.component.UserReader;
@@ -30,7 +31,7 @@ public class AuthService {
             String refreshToken = getRefreshToken(user);
             user.updateRefreshToken(refreshToken);
             return AuthResponse.success(accessToken, refreshToken);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             return AuthResponse.shouldSignUp();
         }
     }

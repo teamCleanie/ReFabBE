@@ -1,7 +1,9 @@
 package cleanie.repatch.common.exception;
 
 import cleanie.repatch.common.exception.model.ExceptionCode;
+import lombok.Getter;
 
+@Getter
 public class EntityNotFoundException extends RuntimeException {
 
     private final int code;

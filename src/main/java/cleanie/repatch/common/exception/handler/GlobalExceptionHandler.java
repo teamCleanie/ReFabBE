@@ -5,6 +5,8 @@ import static cleanie.repatch.common.exception.model.ExceptionCode.INTERNAL_SERV
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.DiscordWebhookException;
+import cleanie.repatch.common.exception.EntityNotFoundException;
+import cleanie.repatch.common.exception.UnAuthorizedAccessException;
 import cleanie.repatch.common.exception.model.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(UnAuthorizedAccessException.class)
+    public ResponseEntity<ExceptionResponse> handleUnAuthorizedAccessException(final UnAuthorizedAccessException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.status(401)
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(final EntityNotFoundException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.status(404)
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 

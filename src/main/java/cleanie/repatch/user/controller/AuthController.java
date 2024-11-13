@@ -1,15 +1,15 @@
 package cleanie.repatch.user.controller;
 
+import cleanie.repatch.common.security.annotation.Auth;
+import cleanie.repatch.common.security.annotation.MemberOnly;
+import cleanie.repatch.common.security.domain.Accessor;
 import cleanie.repatch.user.model.request.OAuthLoginRequest;
 import cleanie.repatch.user.model.response.AuthResponse;
 import cleanie.repatch.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,5 +25,11 @@ public class AuthController {
                 .header("Authorization", "Bearer " + response.getAccessToken())
                 .header("Refresh-Token", response.getRefreshToken())
                 .body(response);
+    }
+
+    @GetMapping("/test")
+    @MemberOnly
+    public String test(@Auth Accessor accessor) {
+        return "test";
     }
 }

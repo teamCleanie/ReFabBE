@@ -30,9 +30,9 @@ public class PhotoController {
     }
 
     @Operation(summary = "사진 삭제", description = "사진(1장)을 삭제합니다.")
-    @DeleteMapping("/{photo_id}")
+    @DeleteMapping("/{photoId}")
     public ResponseEntity<Void> deletePhoto(
-            @PathVariable(name = "photo_id") Long photoId){
+            @PathVariable(name = "photoId") Long photoId){
         if (photoService.deletePhotoIfExistsById(photoId)){
             return ResponseEntity.ok(null);
         } else {

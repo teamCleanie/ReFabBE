@@ -20,9 +20,9 @@ public class PostController {
 
     // 게시글 개별 조회
     @Operation(summary = "게시글 개별 조회", description = "게시글 id를 받아 일치하는 게시글을 조회합니다.")
-    @GetMapping("/{post_id}")
+    @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> readSinglePost(
-            @PathVariable(name = "post_id") Long postId){
+            @PathVariable(name = "postId") Long postId){
         PostResponse response = postService.viewPost(postId);
 
         return ResponseEntity.ok(response);
@@ -33,7 +33,7 @@ public class PostController {
     @PostMapping("/draft")
     public ResponseEntity<PostIdResponse> saveDraft(
             @RequestBody PostRequest request,
-            @Parameter(description = "게시글 id", example = "1") @RequestParam(required = false, name = "post_id") Long postId){
+            @Parameter(description = "게시글 id", example = "1") @RequestParam(required = false, name = "postId") Long postId){
         PostIdResponse response = (postId == null) ?
                 postService.savePost(request, false) :
                 postService.updatePost(request, postId, false);
@@ -46,7 +46,7 @@ public class PostController {
     @PostMapping("/upload")
     public ResponseEntity<PostIdResponse> savePost(
             @RequestBody PostRequest request,
-            @RequestParam(required = false, name = "post_id") Long postId){
+            @RequestParam(required = false, name = "postId") Long postId){
         PostIdResponse response = (postId == null) ?
                 postService.savePost(request, true) :
                 postService.updatePost(request, postId, true);
@@ -56,10 +56,10 @@ public class PostController {
 
     // 발행된 게시글 수정
     @Operation(summary = "게시글 수정", description = "게시글을 수정하고, 게시글 id를 반환합니다.")
-    @PostMapping("/edit/{post_id}")
+    @PostMapping("/edit/{postId}")
     public ResponseEntity<PostIdResponse> editPost(
             @RequestBody PostRequest request,
-            @PathVariable(name = "post_id") Long postId){
+            @PathVariable(name = "postId") Long postId){
         PostIdResponse response = postService.updatePost(request, postId, true);
 
         return ResponseEntity.ok(response);
@@ -67,8 +67,8 @@ public class PostController {
 
     // 게시글 삭제
     @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다.")
-    @DeleteMapping("/delete/{post_id}")
-    public ResponseEntity<String> deletePost(@PathVariable(name = "post_id") Long postId){
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable(name = "postId") Long postId){
         if (postService.deletePostById(postId)) {
             return ResponseEntity.ok("deleted");
         } else {

@@ -21,6 +21,9 @@ public class AuthController {
     @PostMapping("/oauth/login")
     public ResponseEntity<AuthResponse> oauthLogin(@Valid @RequestBody OAuthLoginRequest request) {
         AuthResponse response = authService.loginOAuth(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + response.getAccessToken())
+                .header("Refresh-Token", response.getRefreshToken())
+                .body(response);
     }
 }

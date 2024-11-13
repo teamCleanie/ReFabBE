@@ -1,8 +1,8 @@
-package cleanie.repatch.post.service;
+package cleanie.repatch.post.component;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.post.model.PostRequest;
+import cleanie.repatch.post.model.request.PostRequest;
 import org.springframework.stereotype.Component;
 
 @Component

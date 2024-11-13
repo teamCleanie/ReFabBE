@@ -2,8 +2,8 @@ package cleanie.repatch.photo.controller;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.photo.model.PhotoResponse;
-import cleanie.repatch.photo.model.PhotoUploadRequest;
+import cleanie.repatch.photo.model.response.PhotoResponse;
+import cleanie.repatch.photo.model.request.PhotoUploadRequest;
 import cleanie.repatch.photo.service.PhotoService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

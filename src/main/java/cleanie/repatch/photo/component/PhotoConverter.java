@@ -1,7 +1,7 @@
-package cleanie.repatch.photo.service;
+package cleanie.repatch.photo.component;
 
 import cleanie.repatch.photo.domain.PhotoEntity;
-import cleanie.repatch.photo.model.PhotoResponse;
+import cleanie.repatch.photo.model.response.PhotoResponse;
 import org.springframework.stereotype.Component;
 
 @Component

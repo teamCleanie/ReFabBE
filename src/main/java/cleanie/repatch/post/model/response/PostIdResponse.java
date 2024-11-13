@@ -1,4 +1,4 @@
-package cleanie.repatch.post.model;
+package cleanie.repatch.post.model.response;
 
 import lombok.Builder;
 

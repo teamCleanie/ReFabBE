@@ -1,4 +1,4 @@
-package cleanie.repatch.photo.model;
+package cleanie.repatch.photo.model.request;
 
 import org.springframework.web.multipart.MultipartFile;
 

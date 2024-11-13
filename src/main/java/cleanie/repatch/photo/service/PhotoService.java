@@ -1,9 +1,10 @@
 package cleanie.repatch.photo.service;
 
 import cleanie.repatch.common.s3.helper.S3FileManager;
+import cleanie.repatch.photo.component.PhotoConverter;
 import cleanie.repatch.photo.domain.PhotoEntity;
-import cleanie.repatch.photo.model.PhotoUploadRequest;
-import cleanie.repatch.photo.model.PhotoResponse;
+import cleanie.repatch.photo.model.request.PhotoUploadRequest;
+import cleanie.repatch.photo.model.response.PhotoResponse;
 import cleanie.repatch.photo.repository.PhotoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

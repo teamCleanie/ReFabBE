@@ -1,14 +1,14 @@
-package cleanie.repatch.post.service;
+package cleanie.repatch.post.component;
 
 import cleanie.repatch.photo.domain.PhotoEntity;
-import cleanie.repatch.photo.service.PostPhotoManager;
+import cleanie.repatch.photo.component.PostPhotoManager;
 import cleanie.repatch.post.domain.PostEntity;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 import cleanie.repatch.post.domain.enums.TransactionTypes;
-import cleanie.repatch.post.model.PostIdResponse;
-import cleanie.repatch.post.model.PostRequest;
-import cleanie.repatch.post.model.PostResponse;
+import cleanie.repatch.post.model.response.PostIdResponse;
+import cleanie.repatch.post.model.request.PostRequest;
+import cleanie.repatch.post.model.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

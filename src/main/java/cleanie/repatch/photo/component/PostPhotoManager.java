@@ -1,10 +1,10 @@
-package cleanie.repatch.photo.service;
+package cleanie.repatch.photo.component;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.photo.domain.PhotoEntity;
 import cleanie.repatch.photo.repository.PhotoRepository;
-import cleanie.repatch.post.model.PostRequest;
+import cleanie.repatch.post.model.request.PostRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

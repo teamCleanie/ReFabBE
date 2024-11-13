@@ -1,4 +1,4 @@
-package cleanie.repatch.post.model;
+package cleanie.repatch.post.model.request;
 
 import java.util.List;
 import java.util.Set;

@@ -1,8 +1,8 @@
 package cleanie.repatch.post.controller;
 
-import cleanie.repatch.post.model.PostIdResponse;
-import cleanie.repatch.post.model.PostRequest;
-import cleanie.repatch.post.model.PostResponse;
+import cleanie.repatch.post.model.response.PostIdResponse;
+import cleanie.repatch.post.model.request.PostRequest;
+import cleanie.repatch.post.model.response.PostResponse;
 import cleanie.repatch.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

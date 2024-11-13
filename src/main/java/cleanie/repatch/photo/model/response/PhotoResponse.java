@@ -1,4 +1,4 @@
-package cleanie.repatch.photo.model;
+package cleanie.repatch.photo.model.response;
 
 import lombok.Builder;
 

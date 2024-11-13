@@ -5,7 +5,7 @@ import cleanie.repatch.common.exception.OAuthApiException;
 import cleanie.repatch.user.model.OAuthProvider;
 import cleanie.repatch.user.model.OAuthUserInfo;
 import cleanie.repatch.user.model.request.OAuthLoginRequest;
-import cleanie.repatch.user.model.response.KakaoUserResponse;
+import cleanie.repatch.user.model.response.NaverUserResponse;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -19,32 +19,33 @@ import static cleanie.repatch.common.exception.model.ExceptionCode.INVALID_OAUTH
 import static cleanie.repatch.common.exception.model.ExceptionCode.OAUTH_API_ERROR;
 
 @Component
-public class KakaoApiClient implements OAuthApiClient {
+public class NaverApiClient implements OAuthApiClient{
 
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
+    private final WebClient naverWebClient;
 
-    private final WebClient kakaoWebClient;
 
-    public KakaoApiClient(@Qualifier("kakaoWebClient") WebClient webClient) {
-        this.kakaoWebClient = webClient;
+    public NaverApiClient(@Qualifier("naverWebClient") WebClient naverWebClient) {
+        this.naverWebClient = naverWebClient;
     }
 
     @Override
     public OAuthProvider getProvider() {
-        return OAuthProvider.KAKAO;
+        return OAuthProvider.NAVER;
     }
 
     @Override
     public OAuthUserInfo getUserInfo(OAuthLoginRequest request) {
         String accessToken = request.getAccessToken();
+
         try {
-            KakaoUserResponse response = kakaoWebClient.get()
-                    .uri("/v2/user/me")
+            NaverUserResponse response = naverWebClient.get()
+                    .uri("/v1/nid/me")
                     .header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN_PREFIX + accessToken)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, this::handleClientError)
                     .onStatus(HttpStatusCode::is5xxServerError, this::handleServerError)
-                    .bodyToMono(KakaoUserResponse.class)
+                    .bodyToMono(NaverUserResponse.class)
                     .block();
 
             return convertToOAuthUserInfo(response);
@@ -66,12 +67,12 @@ public class KakaoApiClient implements OAuthApiClient {
                 .flatMap(error -> Mono.error(new OAuthApiException(OAUTH_API_ERROR, getProvider(), error)));
     }
 
-    private OAuthUserInfo convertToOAuthUserInfo(KakaoUserResponse response) {
+    private OAuthUserInfo convertToOAuthUserInfo(NaverUserResponse response) {
         return OAuthUserInfo.builder()
-                .id(String.valueOf(response.getId()))
+                .id(response.getId())
                 .name(response.getName())
-                .profileImageUrl(response.getProfileImageUrl())
-                .provider(OAuthProvider.KAKAO)
+                .profileImageUrl(response.getProfileImage())
+                .provider(OAuthProvider.NAVER)
                 .build();
     }
 }

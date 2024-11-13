@@ -18,6 +18,14 @@ public class WebClientConfig {
     }
 
     @Bean
+    public WebClient naverWebClient() {
+        return WebClient.builder()
+                .baseUrl("https://openapi.naver.com")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .build();
+    }
+
+    @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }

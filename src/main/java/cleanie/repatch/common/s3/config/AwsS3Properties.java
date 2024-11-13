@@ -1,6 +1,5 @@
 package cleanie.repatch.common.s3.config;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -18,13 +17,6 @@ public class AwsS3Properties {
         this.bucket = bucket;
         this.credentials = credentials;
         this.cloudfront = cloudfront;
-    }
-
-    @PostConstruct
-    public void checkAwsS3Properties() {
-        System.out.println("Region: " + getRegion());
-        System.out.println("Credentials: "+ (credentials.accessKey!=null));
-        System.out.println("Bucket: " + bucket);
     }
 
     public String getAccessKey() {

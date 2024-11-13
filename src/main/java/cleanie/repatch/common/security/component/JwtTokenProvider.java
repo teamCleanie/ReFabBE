@@ -95,4 +95,15 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    public boolean shouldRenewRefreshToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+            Date expiration = claims.getExpiration();
+            // 리프레시 토큰의 만료 일자가 7일 이내로 남은 경우 갱신
+            return expiration.getTime() - System.currentTimeMillis() < 7 * 24 * 60 * 60 * 1000L;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

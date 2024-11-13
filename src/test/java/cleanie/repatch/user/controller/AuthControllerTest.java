@@ -6,7 +6,6 @@ import cleanie.repatch.common.security.config.SecurityConfig;
 import cleanie.repatch.common.security.model.JwtProperties;
 import cleanie.repatch.setting.config.RestDocsConfiguration;
 import cleanie.repatch.setting.config.RestDocsTestSupport;
-import cleanie.repatch.user.model.LoginStatus;
 import cleanie.repatch.user.model.OAuthProvider;
 import cleanie.repatch.user.model.request.OAuthLoginRequest;
 import cleanie.repatch.user.model.response.AuthResponse;

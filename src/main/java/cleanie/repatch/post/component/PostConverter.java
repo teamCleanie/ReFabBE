@@ -36,7 +36,8 @@ public class PostConverter {
                 .content(request.content())
                 .isPublished(isPublished)
                 .photos(photos)
-                .transactionTypes(TransactionTypes.createTransactionTypesFromString(request.transactionTypes()))
+                .transactionTypes(TransactionTypes.createTransactionTypesFromString(
+                        request.transactionTypes()))
                 .build();
     }
 
@@ -49,8 +50,8 @@ public class PostConverter {
                 .price(request.price())
                 .content(request.content())
                 .isPublished(isPublished)
-                .transactionTypes(TransactionTypes.updateTransactionTypesWithString(
-                        originalPost.getTransactionTypes(), request.transactionTypes()))
+                .transactionTypes(TransactionTypes.createTransactionTypesFromString(
+                        request.transactionTypes()))
                 .photos(updatedPhotos)
                 .build();
     }

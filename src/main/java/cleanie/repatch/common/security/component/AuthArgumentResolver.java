@@ -53,7 +53,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     private boolean isValidToken(String token) {
-        return !token.isBlank() || jwtTokenProvider.isValidToken(token);
+        return !token.isBlank() && jwtTokenProvider.isValidToken(token);
     }
 
 }

@@ -9,12 +9,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "photo")
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PhotoEntity {
+public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

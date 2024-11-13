@@ -1,8 +1,8 @@
 package cleanie.repatch.post.component;
 
-import cleanie.repatch.photo.domain.PhotoEntity;
+import cleanie.repatch.photo.domain.Photo;
 import cleanie.repatch.photo.component.PostPhotoManager;
-import cleanie.repatch.post.domain.PostEntity;
+import cleanie.repatch.post.domain.Post;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 import cleanie.repatch.post.domain.enums.TransactionTypes;
@@ -22,12 +22,12 @@ public class PostConverter {
 
     private final PostPhotoManager postPhotoManager;
 
-    public PostEntity toPostEntity(PostRequest request, boolean isPublished){
-        List<PhotoEntity> photos = (request.photoIds().isEmpty()) ?
+    public Post toPostEntity(PostRequest request, boolean isPublished){
+        List<Photo> photos = (request.photoIds().isEmpty()) ?
                 new ArrayList<>() :
                 postPhotoManager.getPhotoEntitiesFromIds(request.photoIds());
 
-        return PostEntity.builder()
+        return Post.builder()
                 .postType(PostType.getTypeByString(request.postType()))
                 .title(request.title())
                 .fabricType(FabricType.getTypeByString(request.fabricType()))
@@ -40,8 +40,8 @@ public class PostConverter {
                 .build();
     }
 
-    public PostEntity toEditedPostEntity(PostEntity originalPost, PostRequest request,
-                                         boolean isPublished, List<PhotoEntity> updatedPhotos) {
+    public Post toEditedPostEntity(Post originalPost, PostRequest request,
+                                   boolean isPublished, List<Photo> updatedPhotos) {
         return originalPost.toBuilder()
                 .title(request.title())
                 .fabricType(FabricType.getTypeByString(request.fabricType()))
@@ -55,23 +55,23 @@ public class PostConverter {
                 .build();
     }
 
-    public PostResponse toPostResponse(PostEntity postEntity){
-        List<String> imageUrls = postPhotoManager.getImageUrlFromEntities(postEntity.getPhotos());
-        Set<String> transactionTypes = TransactionTypes.getStringFromTransactionTypes(postEntity.getTransactionTypes());
+    public PostResponse toPostResponse(Post post){
+        List<String> imageUrls = postPhotoManager.getImageUrlFromEntities(post.getPhotos());
+        Set<String> transactionTypes = TransactionTypes.getStringFromTransactionTypes(post.getTransactionTypes());
 
         return PostResponse.builder()
-                .id(postEntity.getId())
-                .postType(postEntity.getPostType().getPostKorName())
-                .title(postEntity.getTitle())
-                .fabricType(postEntity.getFabricType().getFabricKorName())
-                .unit(postEntity.getUnit())
-                .price(postEntity.getPrice())
-                .content(postEntity.getContent())
+                .id(post.getId())
+                .postType(post.getPostType().getPostKorName())
+                .title(post.getTitle())
+                .fabricType(post.getFabricType().getFabricKorName())
+                .unit(post.getUnit())
+                .price(post.getPrice())
+                .content(post.getContent())
                 .tradeTypes(transactionTypes)
-                .isPublished(postEntity.getIsPublished())
+                .isPublished(post.getIsPublished())
                 .photos(imageUrls)
-                .createdAt(postEntity.getCreatedAt())
-                .modifiedAt(postEntity.getModifiedAt())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getModifiedAt())
                 .build();
     }
 

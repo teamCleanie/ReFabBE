@@ -1,6 +1,6 @@
 package cleanie.repatch.post.domain;
 
-import cleanie.repatch.photo.domain.PhotoEntity;
+import cleanie.repatch.photo.domain.Photo;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 import cleanie.repatch.post.domain.enums.TransactionTypes;
@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PostEntity {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,7 +42,7 @@ public class PostEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
-    private List<PhotoEntity> photos;
+    private List<Photo> photos;
 
     @CreatedDate
     private LocalDateTime createdAt;

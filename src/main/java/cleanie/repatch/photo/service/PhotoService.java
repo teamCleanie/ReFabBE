@@ -5,7 +5,7 @@ import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.common.s3.helper.S3FileManager;
 import cleanie.repatch.photo.component.PhotoConverter;
 import cleanie.repatch.photo.component.PhotoValidator;
-import cleanie.repatch.photo.domain.PhotoEntity;
+import cleanie.repatch.photo.domain.Photo;
 import cleanie.repatch.photo.model.request.PhotoUploadRequest;
 import cleanie.repatch.photo.model.response.PhotoResponse;
 import cleanie.repatch.photo.repository.PhotoRepository;
@@ -36,7 +36,7 @@ public class PhotoService {
             }
             String fileName = "username_"+ UUID.randomUUID();
             String imageUrl = s3FileManager.uploadFile(request.photos().get(i), fileName);
-            PhotoEntity photo = photoRepository.save(photoConverter.toPhotoEntity(imageUrl));
+            Photo photo = photoRepository.save(photoConverter.toPhotoEntity(imageUrl));
             responses.add(photoConverter.toPhotoResponse(photo));
         }
         return responses;

@@ -1,6 +1,6 @@
 package cleanie.repatch.photo.service;
 
-import cleanie.repatch.common.exception.BadRequestException;
+import cleanie.repatch.common.exception.FileTypeMismatchException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.common.s3.helper.S3FileManager;
 import cleanie.repatch.photo.component.PhotoConverter;
@@ -32,7 +32,7 @@ public class PhotoService {
         List<PhotoResponse> responses = new ArrayList<>();
         for (int i = 0; i < request.photos().size(); i++){
             if (!photoValidator.validateFileAsImage(request.photos().get(i))) {
-                throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
+                throw new FileTypeMismatchException(ExceptionCode.FILE_TYPE_NOT_SUPPORTED);
             }
             String fileName = "username_"+ UUID.randomUUID();
             String imageUrl = s3FileManager.uploadFile(request.photos().get(i), fileName);
@@ -44,11 +44,9 @@ public class PhotoService {
 
     @Transactional
     public boolean deletePhotoIfExistsById(Long id){
-        if (photoRepository.existsById(id)){
-            photoRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+        return photoRepository.findById(id)
+                .map(post -> { photoRepository.delete(post);
+                    return true;
+                }).orElse(false);
     }
 }

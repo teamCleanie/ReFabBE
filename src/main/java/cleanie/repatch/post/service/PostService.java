@@ -45,10 +45,16 @@ public class PostService {
     }
 
     @Transactional
-    public PostIdResponse savePostFromDraft(Long draftId) {
+    public PostIdResponse publishPostFromDraft(Long draftId, PostRequest request) {
+        Post post = postRepository.save(Post.toPost(request));
         Draft draft = draftPostManager.findDraftById(draftId);
-        Post post = postRepository.save(Post.publishDraft(draft));
 
+        Post postWithPhoto = movePhotosFromDraftToPost(draft, post);
+
+        return post.toPostIdResponse(postWithPhoto);
+    }
+
+    public Post movePhotosFromDraftToPost(Draft draft, Post post) {
         List<Long> photoIds = draft.getDraftPhotos().getPhotoList().stream()
                 .map(Photo::getId).toList();
 
@@ -57,8 +63,7 @@ public class PostService {
             photosManager.removeDraftIdFromPhotoList(photos);
             photosManager.addPostIdToPhotoList(photos, post.getId());
         }
-
-        return post.toPostIdResponse(post);
+        return post;
     }
 
     @Transactional

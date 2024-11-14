@@ -36,7 +36,7 @@ public class PostController {
             @RequestParam(required = false, name = "draftId") Long draftId){
         PostIdResponse response = (draftId == null) ?
                 postService.savePost(request) :
-                postService.savePostFromDraft(draftId);
+                postService.publishPostFromDraft(draftId, request);
 
         return ResponseEntity.ok(response);
     }

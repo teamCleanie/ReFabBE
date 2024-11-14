@@ -28,6 +28,10 @@ configurations {
     asciidoctorExt
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add('-parameters')
+}
+
 repositories {
     mavenCentral()
 }
@@ -42,6 +46,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
     // Database Driver
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -87,6 +94,17 @@ openapi {
     separatePublicApi = true
 }
 
+tasks.register('generateOpenApi') {
+    dependsOn test
+    group = 'documentation'
+    doLast {
+        copy {
+            from "${layout.buildDirectory.get()}/resources/main/static/docs"
+            into "src/main/resources/static/docs"
+        }
+    }
+}
+
 tasks.named('test') {
     outputs.dir snippetsDir
     useJUnitPlatform()
@@ -126,13 +144,9 @@ sonar {
     }
 }
 
-tasks.register('generateOpenApi') {
-    dependsOn test
-    group = 'documentation'
+tasks.named("clean") {
     doLast {
-        copy {
-            from "${layout.buildDirectory.get()}/resources/main/static/docs"
-            into "src/main/resources/static/docs"
-        }
+        delete "${layout.buildDirectory.get()}/resources/main/static/docs"
     }
 }
+

@@ -1,0 +1,21 @@
+= API Documentation
+:toc:
+:source-highlighter: highlightjs
+
+== 인증 API
+
+=== OAuth 로그인
+curl
+include::{snippets}/auth-oauth-login/curl-request.adoc[]
+
+request
+include::{snippets}/auth-oauth-login/http-request.adoc[]
+
+request body
+include::{snippets}/auth-oauth-login/request-body.adoc[]
+
+response
+include::{snippets}/auth-oauth-login/http-response.adoc[]
+
+response body
+include::{snippets}/auth-oauth-login/response-body.adoc[]

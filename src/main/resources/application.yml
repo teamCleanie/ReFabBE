@@ -48,3 +48,19 @@ cloud:
       secret-key: ${AWS_SECRET_ACCESS_KEY}
     region:
       static-region: ${AWS_REGION}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html  # 기본 경로로 설정
+    disable-swagger-default-url: false
+    urls:
+      - url: /docs/openapi3.yaml
+        name: "REST Docs API"
+    urls-primary-name: "REST Docs API"
+  api-docs:
+    enabled: true   # api-docs 활성화
+    path: /v3/api-docs
+  show-actuator: false
+  pathsToMatch: /api/**
+

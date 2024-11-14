@@ -36,7 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AuthController.class)
 @Import({RestDocsConfiguration.class, SecurityConfig.class, JwtTokenProvider.class})
 @AutoConfigureRestDocs
-@ExtendWith(RestDocumentationExtension.class)
 public class AuthControllerTest extends RestDocsTestSupport {
 
     @MockBean
@@ -60,7 +59,7 @@ public class AuthControllerTest extends RestDocsTestSupport {
         given(authService.loginOAuth(any(OAuthLoginRequest.class)))
                 .willReturn(response);
 
-        mockMvc.perform(post("/auth/oauth/login")
+        mockMvc.perform(post("/api/auth/oauth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

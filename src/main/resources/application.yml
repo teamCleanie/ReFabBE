@@ -48,3 +48,18 @@ cloud:
       secret-key: ${AWS_SECRET_ACCESS_KEY}
     region:
       static-region: ${AWS_REGION}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /docs/openapi3.yaml
+    disable-swagger-default-url: true
+    config-url: /docs/openapi3.yaml
+    urls:
+      - url: /docs/oepnapi3.yaml
+        name: REST Docs API
+    default-url: /docs/openapi3.yaml
+  show-actuator: false
+  packages-to-scan: cleanie.repatch

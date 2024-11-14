@@ -1,4 +1,4 @@
-package cleanie.repatch.photo.domain;
+package cleanie.repatch.photo.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

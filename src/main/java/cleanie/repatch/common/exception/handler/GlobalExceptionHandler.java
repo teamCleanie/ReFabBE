@@ -3,10 +3,7 @@ package cleanie.repatch.common.exception.handler;
 import static cleanie.repatch.common.exception.model.ExceptionCode.INVALID_REQUEST;
 import static cleanie.repatch.common.exception.model.ExceptionCode.INTERNAL_SERVER_ERROR;
 
-import cleanie.repatch.common.exception.BadRequestException;
-import cleanie.repatch.common.exception.DiscordWebhookException;
-import cleanie.repatch.common.exception.EntityNotFoundException;
-import cleanie.repatch.common.exception.UnAuthorizedAccessException;
+import cleanie.repatch.common.exception.*;
 import cleanie.repatch.common.exception.model.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +65,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 
+    @ExceptionHandler(OAuthApiException.class)
+    public ResponseEntity<ExceptionResponse> handleOAuthApiException(final OAuthApiException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.internalServerError()
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
     @ExceptionHandler(DiscordWebhookException.class)
     public ResponseEntity<ExceptionResponse> handleDiscordWebhookException(final DiscordWebhookException e) {
+        // TODO: 프론트엔드 구현 완료 시, 에러 로그를 남기도록 변경 필요
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.internalServerError()

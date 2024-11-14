@@ -50,16 +50,17 @@ cloud:
       static-region: ${AWS_REGION}
 
 springdoc:
-  api-docs:
-    enabled: false
   swagger-ui:
-    path: /swagger-ui.html
-    url: /docs/openapi3.yaml
-    disable-swagger-default-url: true
-    config-url: /docs/openapi3.yaml
+    enabled: true
+    path: /swagger-ui.html  # 기본 경로로 설정
+    disable-swagger-default-url: false
     urls:
-      - url: /docs/oepnapi3.yaml
-        name: REST Docs API
-    default-url: /docs/openapi3.yaml
+      - url: /docs/openapi3.yaml
+        name: "REST Docs API"
+    urls-primary-name: "REST Docs API"
+  api-docs:
+    enabled: true   # api-docs 활성화
+    path: /v3/api-docs
   show-actuator: false
-  packages-to-scan: cleanie.repatch
+  pathsToMatch: /api/**
+

@@ -2,10 +2,11 @@ package cleanie.repatch.post.service;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
+import cleanie.repatch.draft.domain.Draft;
 import cleanie.repatch.photo.domain.Photo;
-import cleanie.repatch.photo.component.PostPhotoManager;
-import cleanie.repatch.post.component.PostConverter;
-import cleanie.repatch.post.component.PostValidator;
+import cleanie.repatch.photo.component.PhotosManager;
+import cleanie.repatch.photo.domain.Photos;
+import cleanie.repatch.post.component.DraftPostManager;
 import cleanie.repatch.post.domain.Post;
 import cleanie.repatch.post.model.response.PostIdResponse;
 import cleanie.repatch.post.model.request.PostRequest;
@@ -22,43 +23,55 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final PostPhotoManager postPhotoManager;
-    private final PostConverter postConverter;
-    private final PostValidator postValidator;
+    private final PhotosManager photosManager;
+    private final DraftPostManager draftPostManager;
 
     @Transactional
     public PostResponse viewPost(Long postId){
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.INVALID_REQUEST));
+                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
 
-        return postConverter.toPostResponse(post);
+        return post.toPostResponse(post);
     }
 
     @Transactional
-    public PostIdResponse savePost(PostRequest request, boolean isPublished){
-        // 게시글 작성일 때만 검증
-        if (isPublished){
-            postValidator.validatePostRequest(request);
+    public PostIdResponse savePost(PostRequest request){
+        List<Photo> photoList = photosManager.getPhotoListFromIds(request.photoIds());
+        Post savedPost = postRepository.save(Post.toPost(request));
+
+        photosManager.addPostIdToPhotoList(photoList, savedPost.getId());
+
+        return savedPost.toPostIdResponse(savedPost);
+    }
+
+    @Transactional
+    public PostIdResponse savePostFromDraft(Long draftId) {
+        Draft draft = draftPostManager.findDraftById(draftId);
+        Post post = postRepository.save(Post.publishDraft(draft));
+
+        List<Long> photoIds = draft.getDraftPhotos().getPhotoList().stream()
+                .map(Photo::getId).toList();
+
+        if (!photoIds.isEmpty()) {
+            List<Photo> photos = photosManager.getPhotoListFromIds(photoIds);
+            photosManager.removeDraftIdFromPhotoList(photos);
+            photosManager.addPostIdToPhotoList(photos, post.getId());
         }
 
-        // 임시저장이면 검증 건너뛰기
-        Post post = postRepository.save(postConverter.toPostEntity(request, isPublished));
-        List<Photo> photos = post.getPhotos();
-        postPhotoManager.addPostIdToPhotoEntities(photos, post.getId());
-
-        return postConverter.toPostIdResponse(post.getId());
+        return post.toPostIdResponse(post);
     }
 
     @Transactional
-    public PostIdResponse updatePost(PostRequest request, Long postId, boolean isPublished){
+    public PostIdResponse updatePost(PostRequest request, Long postId){
         Post originalPost = postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.INVALID_REQUEST));
+                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
 
-        List<Photo> updatedPhotos = postPhotoManager.updatePostIds(originalPost.getId(), request);
-        Post editedPost = postConverter.toEditedPostEntity(originalPost, request, isPublished, updatedPhotos);
-        Post updatedPost = postRepository.save(editedPost);
+        List<Photo> updatedPhotos = photosManager.updatePostIds(originalPost.getId(), request.photoIds());
+        Photos photos = new Photos(updatedPhotos);
 
-        return postConverter.toPostIdResponse(updatedPost.getId());
+        Post editedPost = originalPost.updatePost(originalPost, request, photos);
+
+        return editedPost.toPostIdResponse(editedPost);
     }
 
     @Transactional

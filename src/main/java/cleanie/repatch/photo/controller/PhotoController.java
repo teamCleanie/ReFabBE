@@ -36,7 +36,7 @@ public class PhotoController {
         if (photoService.deletePhotoIfExistsById(photoId)){
             return ResponseEntity.ok(null);
         } else {
-            throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
+            throw new BadRequestException(ExceptionCode.FILE_NOT_FOUND);
         }
     }
 }

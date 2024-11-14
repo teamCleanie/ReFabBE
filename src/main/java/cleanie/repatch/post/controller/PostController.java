@@ -5,7 +5,7 @@ import cleanie.repatch.post.model.request.PostRequest;
 import cleanie.repatch.post.model.response.PostResponse;
 import cleanie.repatch.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,28 +28,15 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    // 게시글 임시저장
-    @Operation(summary = "게시글 임시저장", description = "게시글을 임시 저장하고, 게시글 id를 반환합니다. (빈 필드 저장 가능)")
-    @PostMapping("/draft")
-    public ResponseEntity<PostIdResponse> saveDraft(
-            @RequestBody PostRequest request,
-            @Parameter(description = "게시글 id", example = "1") @RequestParam(required = false, name = "postId") Long postId){
-        PostIdResponse response = (postId == null) ?
-                postService.savePost(request, false) :
-                postService.updatePost(request, postId, false);
-
-        return ResponseEntity.ok(response);
-    }
-
     // 게시글 발행
     @Operation(summary = "게시글 업로드", description = "게시글을 저장하고, 게시글 id를 반환합니다. (빈 필드 존재 시 저장 불가)")
     @PostMapping("/upload")
     public ResponseEntity<PostIdResponse> savePost(
-            @RequestBody PostRequest request,
-            @RequestParam(required = false, name = "postId") Long postId){
-        PostIdResponse response = (postId == null) ?
-                postService.savePost(request, true) :
-                postService.updatePost(request, postId, true);
+            @RequestBody @Valid PostRequest request,
+            @RequestParam(required = false, name = "draftId") Long draftId){
+        PostIdResponse response = (draftId == null) ?
+                postService.savePost(request) :
+                postService.savePostFromDraft(draftId);
 
         return ResponseEntity.ok(response);
     }
@@ -58,9 +45,9 @@ public class PostController {
     @Operation(summary = "게시글 수정", description = "게시글을 수정하고, 게시글 id를 반환합니다.")
     @PostMapping("/edit/{postId}")
     public ResponseEntity<PostIdResponse> editPost(
-            @RequestBody PostRequest request,
+            @RequestBody @Valid PostRequest request,
             @PathVariable(name = "postId") Long postId){
-        PostIdResponse response = postService.updatePost(request, postId, true);
+        PostIdResponse response = postService.updatePost(request, postId);
 
         return ResponseEntity.ok(response);
     }

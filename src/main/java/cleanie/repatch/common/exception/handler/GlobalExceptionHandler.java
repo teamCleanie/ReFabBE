@@ -67,6 +67,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(OAuthApiException.class)
     public ResponseEntity<ExceptionResponse> handleOAuthApiException(final OAuthApiException e) {
+        // TODO: 프론트엔드 구현 완료 시, 에러 로그를 남기도록 변경 필요
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.internalServerError()
@@ -75,7 +76,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DiscordWebhookException.class)
     public ResponseEntity<ExceptionResponse> handleDiscordWebhookException(final DiscordWebhookException e) {
-        // TODO: 프론트엔드 구현 완료 시, 에러 로그를 남기도록 변경 필요
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.internalServerError()

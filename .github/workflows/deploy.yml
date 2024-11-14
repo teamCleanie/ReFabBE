@@ -81,6 +81,8 @@ jobs:
           docker run -d --name spring-app \
             --network="host" \
             -e RDS_ENDPOINT=${{ secrets.RDS_ENDPOINT }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e KAKAO_ADMIN_KEY=${{ secrets.KAKAO_ADMIN_KEY }} \
             -e DB_NAME=${{ secrets.DB_NAME }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \

@@ -1,7 +1,5 @@
 package cleanie.repatch.post.domain.enums;
 
-import cleanie.repatch.common.exception.BadRequestException;
-import cleanie.repatch.common.exception.model.ExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -27,13 +25,4 @@ public enum FabricType {
 
     private final String fabricEngName;
     private final String fabricKorName;
-
-    public static FabricType getTypeByString(String name) {
-        for (FabricType type : FabricType.values()) {
-            if (type.fabricEngName.equalsIgnoreCase(name) || type.fabricKorName.equals(name)) {
-                return type;
-            }
-        }
-        throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
-    }
 }

@@ -1,7 +1,5 @@
 package cleanie.repatch.post.domain.enums;
 
-import cleanie.repatch.common.exception.BadRequestException;
-import cleanie.repatch.common.exception.model.ExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,13 +12,4 @@ public enum TransactionType {
 
     private final String transactionKorName;
     private final String transactionEngName;
-
-    public static TransactionType getTypeByString(String name){
-        for (TransactionType type : TransactionType.values()){
-            if (type.transactionKorName.equals(name) || type.transactionEngName.equalsIgnoreCase(name)){
-                return type;
-            }
-        }
-        throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
-    }
 }

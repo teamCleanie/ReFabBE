@@ -3,8 +3,7 @@ package cleanie.repatch.common.exception.handler;
 import static cleanie.repatch.common.exception.model.ExceptionCode.INVALID_REQUEST;
 import static cleanie.repatch.common.exception.model.ExceptionCode.INTERNAL_SERVER_ERROR;
 
-import cleanie.repatch.common.exception.BadRequestException;
-import cleanie.repatch.common.exception.DiscordWebhookException;
+import cleanie.repatch.common.exception.*;
 import cleanie.repatch.common.exception.model.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(UnAuthorizedAccessException.class)
+    public ResponseEntity<ExceptionResponse> handleUnAuthorizedAccessException(final UnAuthorizedAccessException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.status(401)
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(final EntityNotFoundException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.status(404)
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(OAuthApiException.class)
+    public ResponseEntity<ExceptionResponse> handleOAuthApiException(final OAuthApiException e) {
+        // TODO: 프론트엔드 구현 완료 시, 에러 로그를 남기도록 변경 필요
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.internalServerError()
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 

@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6'
     id "org.sonarqube" version "4.4.1.3373"
     id 'jacoco'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'com.epages.restdocs-api-spec' version '0.18.4'
     id 'org.springdoc.openapi-gradle-plugin' version '1.8.0'
 }
@@ -28,6 +29,10 @@ configurations {
     asciidoctorExt
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add('-parameters')
+}
+
 repositories {
     mavenCentral()
 }
@@ -42,6 +47,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
     // Database Driver
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -65,8 +73,10 @@ dependencies {
 
     // documentation
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-common:2.3.0'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.4'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     // querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -75,22 +85,56 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
-
-
 ext {
     snippetsDir = file('build/generated-snippets')
+    openApiDir = file("${layout.buildDirectory.get()}/resources/main/static/docs")
 }
 
-openapi {
-    host = 'localhost:8080'
-    basePath = '/'
+tasks.register('createDocsDir') {
+    doLast {
+        openApiDir.mkdirs()
+        file("src/main/resources/static/docs").mkdirs()
+    }
+}
+
+openapi3 {
+    server = 'https://api.re-patch.com'
     title = 'Repatch API 문서'
     description = 'Spring REST Docs로 생성한 API 문서입니다.'
     version = '1.0.0'
-    format = 'yaml'
     outputDirectory = file("${layout.buildDirectory.get()}/resources/main/static/docs")
     outputFileNamePrefix = 'openapi3'
-    separatePublicApi = true
+    format = 'yaml'
+}
+
+tasks.withType(com.epages.restdocs.apispec.gradle.OpenApi3Task).configureEach {
+    dependsOn createDocsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+    sourceDir file('src/docs/asciidoc')
+    outputDir file("${layout.buildDirectory.get()}/docs/asciidoc")
+}
+
+tasks.register('generateOpenApi') {
+    dependsOn test
+    dependsOn 'openapi3'
+    group = 'documentation'
+    doLast {
+        copy {
+            from openApiDir
+            into "src/main/resources/static/docs"
+            include "openapi3.yaml"
+        }
+    }
+}
+
+tasks.named('build') {
+    dependsOn asciidoctor
+    dependsOn generateOpenApi
 }
 
 tasks.named('test') {
@@ -132,13 +176,9 @@ sonar {
     }
 }
 
-tasks.register('generateOpenApi') {
-    dependsOn test
-    group = 'documentation'
+tasks.named("clean") {
     doLast {
-        copy {
-            from "${layout.buildDirectory.get()}/resources/main/static/docs"
-            into "src/main/resources/static/docs"
-        }
+        delete "${layout.buildDirectory.get()}/resources/main/static/docs"
     }
 }
+

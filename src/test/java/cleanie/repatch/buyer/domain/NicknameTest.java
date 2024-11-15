@@ -40,4 +40,13 @@ class NicknameTest {
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ExceptionCode.INVALID_USER_NICKNAME.getMessage());
     }
+
+    @DisplayName("욕설 / 비속어가 포함 되어있는 경우 예외가 잘 발생하는지")
+    @Test
+    @UnitTest
+    void nicknameWithBadWord() {
+        assertThatThrownBy(() -> new Nickname("ㅗ"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(ExceptionCode.INVALID_USER_NICKNAME.getMessage());
+    }
 }

@@ -1,6 +1,7 @@
 package cleanie.repatch.buyer.domain;
 
 import cleanie.repatch.common.exception.BadRequestException;
+import com.vane.badwordfiltering.BadWordFiltering;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -28,7 +29,10 @@ public class Nickname {
     }
 
     private void validate(String nickname) {
-        if (nickname.contains(" ") || containsSpecialCharacter(nickname) || isInvalidNicknameLength(nickname)) {
+        if (nickname.contains(" ")
+                || containsSpecialCharacter(nickname)
+                || isInvalidNicknameLength(nickname)
+                || hasBadwords(nickname)) {
             throw new BadRequestException(INVALID_USER_NICKNAME);
         }
     }
@@ -39,6 +43,10 @@ public class Nickname {
 
     private boolean isInvalidNicknameLength(String nickname) {
         return nickname.length() < MIN_NICKNAME_LENGTH || nickname.length() > MAX_NICKNAME_LENGTH;
+    }
+
+    private boolean hasBadwords(String nickname) {
+        return new BadWordFiltering().check(nickname);
     }
 
     @Override

@@ -10,22 +10,22 @@ public class BusinessName {
 
     private final String businessName;
 
-    public BusinessName(String businessName) {
+    public BusinessName(final String businessName) {
         validate(businessName);
         this.businessName = businessName;
     }
 
-    private void validate(String businessName) {
+    private void validate(final String businessName) {
         if (isOnlyNumbers(businessName) || isOverThenMaxLength(businessName) || businessName.contains(" ")) {
             throw new BadRequestException(INVALID_USER_BUSINESS_NAME);
         }
     }
 
-    private boolean isOnlyNumbers(String businessName) {
+    private boolean isOnlyNumbers(final String businessName) {
         return businessName.matches("^[0-9]*$");
     }
 
-    private boolean isOverThenMaxLength(String businessName) {
+    private boolean isOverThenMaxLength(final String businessName) {
         return businessName.length() > 30;
     }
 }

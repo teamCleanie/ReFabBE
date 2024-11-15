@@ -60,13 +60,11 @@ public class DiscordAppender extends AppenderBase<ILoggingEvent> {
             sendDiscordMessage(payload)
                     .timeout(TIMEOUT)
                     .doOnError(e -> {
-                        log.error("Failed to send Discord message", e);
                         throw new DiscordWebhookException(DISCORD_WEBHOOK_ERROR);
                     })
                     .onErrorResume(e -> Mono.empty())
                     .block();
         } catch (JsonProcessingException e) {
-            log.error("Failed to create Discord message payload", e);
             throw new DiscordWebhookException(DISCORD_WEBHOOK_ERROR);
         }
     }

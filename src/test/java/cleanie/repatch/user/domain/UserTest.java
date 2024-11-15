@@ -15,8 +15,8 @@ class UserTest {
     @Test
     @UnitTest
     void userCreateTest() {
-        User seller = new Seller("tester", "test.jpg", OAuthProvider.KAKAO, "12314");
-        User buyer = new Buyer("tester", "test.jpg,", OAuthProvider.NAVER, "123122");
+        User seller = new Seller("tester", "tester", "test.jpg", OAuthProvider.KAKAO, "12314");
+        User buyer = new Buyer("tester", "testcorp", "test.jpg,", OAuthProvider.NAVER, "123122");
         assertThat(seller.getUserType()).isEqualTo(UserType.SELLER);
         assertThat(buyer.getUserType()).isEqualTo(UserType.BUYER);
     }

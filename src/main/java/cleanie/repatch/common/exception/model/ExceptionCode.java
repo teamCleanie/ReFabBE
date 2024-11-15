@@ -10,7 +10,11 @@ public enum ExceptionCode {
 
     // 11xx: 사용자 관련 에러
     INVALID_AUTHORITY(1101, "권한이 없습니다."),
+
     USER_NOT_FOUND(1201, "사용자를 찾을 수 없습니다."),
+
+    INVALID_USER_BUSINESS_NAME(1301, "올바르지 않은 상호명 입니다."),
+
 
     // 95xx: 외부 서비스 호출 에러
     DISCORD_WEBHOOK_ERROR(9511, "디스코드 Webhook 호출 중 오류가 발생했습니다."),

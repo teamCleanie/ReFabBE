@@ -1,6 +1,8 @@
 package cleanie.repatch.user.domain;
 
 import cleanie.repatch.buyer.domain.Buyer;
+import cleanie.repatch.buyer.domain.Nickname;
+import cleanie.repatch.seller.domain.BusinessName;
 import cleanie.repatch.seller.domain.Seller;
 import cleanie.repatch.setting.annotation.UnitTest;
 import cleanie.repatch.user.model.OAuthProvider;
@@ -15,8 +17,8 @@ class UserTest {
     @Test
     @UnitTest
     void userCreateTest() {
-        User seller = new Seller("tester", "tester", "test.jpg", OAuthProvider.KAKAO, "12314");
-        User buyer = new Buyer("tester", "testcorp", "test.jpg,", OAuthProvider.NAVER, "123122");
+        User seller = new Seller("tester", new BusinessName("tester"), "test.jpg", OAuthProvider.KAKAO, "12314");
+        User buyer = new Buyer("tester", new Nickname("testcorp"), "test.jpg,", OAuthProvider.NAVER, "123122");
         assertThat(seller.getUserType()).isEqualTo(UserType.SELLER);
         assertThat(buyer.getUserType()).isEqualTo(UserType.BUYER);
     }

@@ -1,18 +1,25 @@
 package cleanie.repatch.seller.domain;
 
 import cleanie.repatch.common.exception.BadRequestException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import static cleanie.repatch.common.exception.model.ExceptionCode.INVALID_USER_BUSINESS_NAME;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class BusinessName {
 
     private static final int MAX_LENGTH = 30;
 
-    private final String businessName;
+    @Column(name = "display_name")
+    private final String value;
 
     public BusinessName(final String businessName) {
         validate(businessName);
-        this.businessName = businessName;
+        this.value = businessName;
     }
 
     private void validate(final String businessName) {

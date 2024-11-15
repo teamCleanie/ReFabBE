@@ -3,8 +3,7 @@ package cleanie.repatch.seller.domain;
 import cleanie.repatch.user.domain.User;
 import cleanie.repatch.user.domain.UserType;
 import cleanie.repatch.user.model.OAuthProvider;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seller extends User {
 
-    private String nickname;
+    @Embedded
+    private BusinessName businessName;
 
-    public Seller(String name, String nickname, String imageUrl, OAuthProvider provider, String socialLoginId) {
+    public Seller(String name, BusinessName businessName, String imageUrl, OAuthProvider provider, String socialLoginId) {
         super(name, imageUrl, provider, socialLoginId);
-        this.nickname = nickname;
+        this.businessName = businessName;
     }
 
     @Override

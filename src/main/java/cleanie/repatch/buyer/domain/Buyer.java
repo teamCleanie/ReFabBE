@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Buyer extends User {
 
-    private String buisnessName;
+    private String businessName;
 
-    public Buyer(String name, String buisnessName, String imageUrl, OAuthProvider provider, String socialLoginId) {
+    public Buyer(String name, String businessName, String imageUrl, OAuthProvider provider, String socialLoginId) {
         super(name, imageUrl, provider, socialLoginId);
-        this.buisnessName = buisnessName;
+        this.businessName = businessName;
     }
 
     @Override

@@ -9,10 +9,10 @@ import lombok.Getter;
 public class OAuthLoginRequest {
 
     @NotNull(message = "소셜 로그인 타입이 누락되었습니다.")
-    private OAuthProvider provider;
+    private final OAuthProvider provider;
 
     @NotBlank(message = "로그인을 위한 액세스 토큰이 누락되었습니다.")
-    private String accessToken;
+    private final String accessToken;
 
     public OAuthLoginRequest(OAuthProvider provider, String accessToken) {
         this.provider = provider;

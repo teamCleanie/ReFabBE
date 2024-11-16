@@ -28,10 +28,15 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponse viewPost(Long postId){
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
+        Post post = findPostOrThrowException(postId);
 
         return post.toPostResponse(post);
+    }
+
+    @Transactional(readOnly = true)
+    public Post findPostOrThrowException(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
     }
 
     @Transactional
@@ -68,8 +73,7 @@ public class PostService {
 
     @Transactional
     public PostIdResponse updatePost(PostRequest request, Long postId){
-        Post originalPost = postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
+        Post originalPost = findPostOrThrowException(postId);
 
         List<Photo> updatedPhotos = photosManager.updatePostIds(originalPost.getId(), request.photoIds());
         Photos photos = new Photos(updatedPhotos);

@@ -25,10 +25,15 @@ public class DraftPostService {
 
     @Transactional(readOnly = true)
     public DraftPostResponse viewDraftPost(Long draftId) {
-        DraftPost draftPost = draftPostRepository.findById(draftId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
+        DraftPost draftPost = findDraftPostOrThrowException(draftId);
 
         return draftPost.toDraftResponse(draftPost);
+    }
+
+    @Transactional(readOnly = true)
+    public DraftPost findDraftPostOrThrowException(Long draftId) {
+        return draftPostRepository.findById(draftId).orElseThrow(
+                () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
     }
 
     @Transactional
@@ -43,8 +48,7 @@ public class DraftPostService {
 
     @Transactional
     public DraftPostIdResponse updateDraftPost(DraftPostRequest request, Long draftId) {
-        DraftPost originalDraftPost = draftPostRepository.findById(draftId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
+        DraftPost originalDraftPost = findDraftPostOrThrowException(draftId);
         List<Photo> updatedPhotos = photosManager.updateDraftIds(originalDraftPost.getId(), request.photoIds());
         DraftPhotos photos = new DraftPhotos(updatedPhotos);
 

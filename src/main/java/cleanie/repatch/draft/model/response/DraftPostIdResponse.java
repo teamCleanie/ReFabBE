@@ -1,6 +1,6 @@
 package cleanie.repatch.draft.model.response;
 
-public record DraftIdResponse(
+public record DraftPostIdResponse(
         Long id
 ) {
 }

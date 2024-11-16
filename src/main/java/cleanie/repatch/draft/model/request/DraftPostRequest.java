@@ -7,7 +7,7 @@ import cleanie.repatch.post.domain.enums.PostType;
 import java.util.List;
 import java.util.Set;
 
-public record DraftRequest(
+public record DraftPostRequest(
         PostType postType,
         FabricType fabricType,
         String title,

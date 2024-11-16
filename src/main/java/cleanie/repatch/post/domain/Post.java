@@ -3,7 +3,7 @@ package cleanie.repatch.post.domain;
 import cleanie.repatch.common.domain.BaseEntity;
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.draft.domain.Draft;
+import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.photo.domain.Photos;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
@@ -74,15 +74,15 @@ public class Post extends BaseEntity {
         return post;
     }
 
-    public static Post publishDraft(Draft draft) {
+    public static Post publishDraft(DraftPost draftPost) {
         return Post.builder()
-                .postType(draft.getPostType())
-                .fabricType(draft.getFabricType())
-                .title(draft.getTitle())
-                .unit(draft.getUnit())
-                .price(draft.getPrice())
-                .content(draft.getContent())
-                .transactionTypes(draft.getDraftTransactionTypes().toTransactionTypes())
+                .postType(draftPost.getPostType())
+                .fabricType(draftPost.getFabricType())
+                .title(draftPost.getTitle())
+                .unit(draftPost.getUnit())
+                .price(draftPost.getPrice())
+                .content(draftPost.getContent())
+                .transactionTypes(draftPost.getDraftTransactionTypes().toTransactionTypes())
                 .photos(new Photos())
                 .build();
     }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public record DraftResponse(
+public record DraftPostResponse(
         Long id,
         PostType postType,
         String title,

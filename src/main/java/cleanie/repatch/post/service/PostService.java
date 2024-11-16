@@ -2,7 +2,7 @@ package cleanie.repatch.post.service;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.draft.domain.Draft;
+import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.photo.domain.Photo;
 import cleanie.repatch.photo.component.PhotosManager;
 import cleanie.repatch.photo.domain.Photos;
@@ -47,15 +47,15 @@ public class PostService {
     @Transactional
     public PostIdResponse publishPostFromDraft(Long draftId, PostRequest request) {
         Post post = postRepository.save(Post.toPost(request));
-        Draft draft = draftPostManager.findDraftById(draftId);
+        DraftPost draftPost = draftPostManager.findDraftById(draftId);
 
-        Post postWithPhoto = movePhotosFromDraftToPost(draft, post);
+        Post postWithPhoto = movePhotosFromDraftToPost(draftPost, post);
 
         return post.toPostIdResponse(postWithPhoto);
     }
 
-    public Post movePhotosFromDraftToPost(Draft draft, Post post) {
-        List<Long> photoIds = draft.getDraftPhotos().getPhotoList().stream()
+    public Post movePhotosFromDraftToPost(DraftPost draftPost, Post post) {
+        List<Long> photoIds = draftPost.getDraftPhotos().getPhotoList().stream()
                 .map(Photo::getId).toList();
 
         if (!photoIds.isEmpty()) {

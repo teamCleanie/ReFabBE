@@ -2,8 +2,8 @@ package cleanie.repatch.post.component;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.draft.domain.Draft;
-import cleanie.repatch.draft.repository.DraftRepository;
+import cleanie.repatch.draft.domain.DraftPost;
+import cleanie.repatch.draft.repository.DraftPostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,19 +12,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DraftPostManager {
 
-    private final DraftRepository draftRepository;
+    private final DraftPostRepository draftPostRepository;
 
     @Transactional
-    public Draft findDraftById(Long draftId) {
-        return draftRepository.findById(draftId).orElseThrow(
+    public DraftPost findDraftById(Long draftId) {
+        return draftPostRepository.findById(draftId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
     }
 
     @Transactional
     public boolean deleteDraftById(Long draftId) {
-        return draftRepository.findById(draftId)
+        return draftPostRepository.findById(draftId)
                 .map(draft -> {
-                    draftRepository.delete(draft);
+                    draftPostRepository.delete(draft);
                     return true;
                 }).orElse(false);
     }

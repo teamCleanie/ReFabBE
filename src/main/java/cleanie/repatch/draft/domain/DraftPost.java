@@ -2,12 +2,12 @@ package cleanie.repatch.draft.domain;
 
 import cleanie.repatch.common.domain.BaseEntity;
 import cleanie.repatch.draft.domain.enums.DraftTransactionTypes;
-import cleanie.repatch.draft.model.request.DraftRequest;
-import cleanie.repatch.draft.model.response.DraftResponse;
+import cleanie.repatch.draft.model.request.DraftPostRequest;
+import cleanie.repatch.draft.model.response.DraftPostResponse;
 import cleanie.repatch.photo.domain.DraftPhotos;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
-import cleanie.repatch.draft.model.response.DraftIdResponse;
+import cleanie.repatch.draft.model.response.DraftPostIdResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Draft extends BaseEntity {
+public class DraftPost extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +42,9 @@ public class Draft extends BaseEntity {
     @Embedded
     private DraftPhotos draftPhotos;
 
-    public static Draft toNewDraft(DraftRequest request) {
+    public static DraftPost toNewDraft(DraftPostRequest request) {
 
-        return Draft.builder()
+        return DraftPost.builder()
                 .postType(request.postType())
                 .fabricType(request.fabricType())
                 .title(request.title())
@@ -56,35 +56,35 @@ public class Draft extends BaseEntity {
                 .build();
     }
 
-    public Draft updateDraft(Draft draft, DraftRequest request, DraftPhotos photos) {
-        DraftTransactionTypes draftTransactions = draft.draftTransactionTypes;
+    public DraftPost updateDraft(DraftPost draftPost, DraftPostRequest request, DraftPhotos photos) {
+        DraftTransactionTypes draftTransactions = draftPost.draftTransactionTypes;
 
-        draft.fabricType = request.fabricType();
-        draft.title = request.title();
-        draft.unit = request.unit();
-        draft.price = request.price();
-        draft.content = request.content();
-        draft.draftTransactionTypes = draftTransactions.updateDraftTransactionTypes(
+        draftPost.fabricType = request.fabricType();
+        draftPost.title = request.title();
+        draftPost.unit = request.unit();
+        draftPost.price = request.price();
+        draftPost.content = request.content();
+        draftPost.draftTransactionTypes = draftTransactions.updateDraftTransactionTypes(
                 draftTransactions, request.draftTransactionTypes());
-        draft.draftPhotos = photos;
+        draftPost.draftPhotos = photos;
 
-        return draft;
+        return draftPost;
     }
 
-    public DraftResponse toDraftResponse(Draft draft) {
-        DraftTransactionTypes draftTransactions = draft.getDraftTransactionTypes();
+    public DraftPostResponse toDraftResponse(DraftPost draftPost) {
+        DraftTransactionTypes draftTransactions = draftPost.getDraftTransactionTypes();
 
-        return new DraftResponse(
-                draft.getId(), draft.getPostType(),
-                draft.getTitle(), draft.getFabricType(),
-                draft.getUnit(), draft.getPrice(),
-                draft.getContent(),
+        return new DraftPostResponse(
+                draftPost.getId(), draftPost.getPostType(),
+                draftPost.getTitle(), draftPost.getFabricType(),
+                draftPost.getUnit(), draftPost.getPrice(),
+                draftPost.getContent(),
                 draftTransactions.createStringSet(draftTransactions.getDraftTransactionTypes()),
-                DraftPhotos.toPhotoResponses(draft.getDraftPhotos()),
-                draft.getCreatedAt(), draft.getModifiedAt());
+                DraftPhotos.toPhotoResponses(draftPost.getDraftPhotos()),
+                draftPost.getCreatedAt(), draftPost.getModifiedAt());
     }
 
-    public DraftIdResponse toDraftIdResponse(Draft draft) {
-        return new DraftIdResponse(draft.getId());
+    public DraftPostIdResponse toDraftIdResponse(DraftPost draftPost) {
+        return new DraftPostIdResponse(draftPost.getId());
     }
 }

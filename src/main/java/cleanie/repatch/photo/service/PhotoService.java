@@ -6,7 +6,7 @@ import cleanie.repatch.photo.domain.Photos;
 import cleanie.repatch.photo.model.request.PhotoUploadRequest;
 import cleanie.repatch.photo.model.response.PhotoResponse;
 import cleanie.repatch.photo.repository.PhotoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

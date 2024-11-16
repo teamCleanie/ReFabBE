@@ -12,7 +12,7 @@ import cleanie.repatch.post.model.response.PostIdResponse;
 import cleanie.repatch.post.model.request.PostRequest;
 import cleanie.repatch.post.model.response.PostResponse;
 import cleanie.repatch.post.repository.PostRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class PostService {
     private final PhotosManager photosManager;
     private final DraftPostManager draftPostManager;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PostResponse viewPost(Long postId){
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
@@ -80,11 +80,12 @@ public class PostService {
     }
 
     @Transactional
-    public boolean deletePostById(Long postId) {
-
-        return postRepository.findById(postId)
-                .map(post -> { postRepository.delete(post);
-                    return true;
-                }).orElse(false);
+    public void deletePostById(Long postId) {
+        postRepository.findById(postId).ifPresentOrElse(
+                postRepository::delete,
+                () -> {
+                    throw new BadRequestException(ExceptionCode.POST_NOT_FOUND);
+                }
+        );
     }
 }

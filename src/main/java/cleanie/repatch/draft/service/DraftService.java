@@ -10,7 +10,7 @@ import cleanie.repatch.photo.domain.Photo;
 import cleanie.repatch.draft.domain.Draft;
 import cleanie.repatch.draft.model.response.DraftIdResponse;
 import cleanie.repatch.draft.repository.DraftRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class DraftService {
     private final DraftRepository draftRepository;
     private final PhotosManager photosManager;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public DraftResponse viewDraft(Long draftId) {
         Draft draft = draftRepository.findById(draftId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
@@ -54,12 +54,12 @@ public class DraftService {
     }
 
     @Transactional
-    public boolean deleteDraftById(Long draftId) {
-
-        return draftRepository.findById(draftId)
-                .map(draft -> {
-                    draftRepository.delete(draft);
-                    return true;
-                }).orElse(false);
+    public void deleteDraftById(Long draftId) {
+        draftRepository.findById(draftId).ifPresentOrElse(
+                draftRepository::delete,
+                () -> {
+                    throw new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND);
+                }
+        );
     }
 }

@@ -18,7 +18,6 @@ public class DraftController {
 
     private final DraftService draftService;
 
-    // 게시글 개별 조회
     @Operation(summary = "임시저장 게시글 개별 조회", description = "임시저장글 id를 받아 일치하는 임시저장글을 조회합니다.")
     @GetMapping("/{draftId}")
     public ResponseEntity<DraftResponse> readSinglePost(
@@ -43,10 +42,8 @@ public class DraftController {
     @Operation(summary = "임시저장글 삭제", description = "임시저장된 게시글을 삭제합니다.")
     @DeleteMapping("/delete/{draftId}")
     public ResponseEntity<?> deleteDraft(@PathVariable(name = "draftId") Long draftId) {
-        if (draftService.deleteDraftById(draftId)){
-            return ResponseEntity.ok("deleted");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("delete failed");
-        }
+        draftService.deleteDraftById(draftId);
+
+        return ResponseEntity.ok("deleted");
     }
 }

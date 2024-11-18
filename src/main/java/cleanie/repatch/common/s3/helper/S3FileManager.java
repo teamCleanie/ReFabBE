@@ -25,9 +25,11 @@ public class S3FileManager {
     public String uploadFile(MultipartFile file, String fileName) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
-        String newFileName = fileName + extension;
-        amazonS3Client.putObject(new PutObjectRequest(BUCKET_NAME, newFileName, file.getInputStream(), null));
-        return getCloudFrontUrl(newFileName);
+        if (!fileName.endsWith(extension)) {
+            fileName = fileName + extension;
+        }
+        amazonS3Client.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), null));
+        return getCloudFrontUrl(fileName);
     }
 
     public String getFileUrl(String fileName) {

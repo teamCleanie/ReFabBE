@@ -3,19 +3,19 @@ spring:
     name: repatch
 
   datasource:
-    url: jdbc:postgresql://${RDS_ENDPOINT}:5432/${DB_NAME}
+    url: jdbc:postgresql://${RDS_ENDPOINT}:5432/${DB_NAME}?createDatabaseIfNotExist=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-    jpa:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: none
-      properties:
-        hibernate:
-          default_batch_fetch_size: 100
-      open-in-view: false
+        default_batch_fetch_size: 100
+    open-in-view: false
 
   jackson:
     property-naming-strategy: SNAKE_CASE
@@ -46,21 +46,20 @@ cloud:
     credentials:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_ACCESS_KEY}
-    region:
-      static-region: ${AWS_REGION}
+    region: ${AWS_REGION}
+    cloudfront: ${AWS_CLOUDFRONT_DOMAIN}
 
 springdoc:
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html  # 기본 경로로 설정
+    path: /swagger-ui.html
     disable-swagger-default-url: false
     urls:
       - url: /docs/openapi3.yaml
         name: "REST Docs API"
     urls-primary-name: "REST Docs API"
   api-docs:
-    enabled: true   # api-docs 활성화
+    enabled: true
     path: /v3/api-docs
   show-actuator: false
   pathsToMatch: /api/**
-

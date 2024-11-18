@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableConfigurationProperties(AwsS3Properties.class)
-@EnableJpaAuditing
 public class RepatchApplication {
 
     public static void main(String[] args) {

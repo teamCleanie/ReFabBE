@@ -22,12 +22,11 @@ public class TransactionTypes {
         this.transactionTypes = new HashSet<>();
     }
 
-    public TransactionTypes updateTransactionTypes(
-            TransactionTypes transactionTypes, Set<TransactionType> updates) {
-        transactionTypes.transactionTypes.clear();
-        transactionTypes.transactionTypes.addAll(updates);
+    public TransactionTypes updateTransactionTypes(Set<TransactionType> updates) {
+        this.transactionTypes.clear();
+        this.transactionTypes.addAll(updates);
 
-        return transactionTypes;
+        return this;
     }
 
     public Set<String> createStringSet(Set<TransactionType> transactions) {

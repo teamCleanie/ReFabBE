@@ -24,12 +24,11 @@ public class DraftTransactionTypes {
         this.draftTransactionTypes = new HashSet<>();
     }
 
-    public DraftTransactionTypes updateDraftTransactionTypes(
-            DraftTransactionTypes draftTransactionTypes, Set<DraftTransactionType> updates) {
-        draftTransactionTypes.draftTransactionTypes.clear();
-        draftTransactionTypes.draftTransactionTypes.addAll(updates);
+    public DraftTransactionTypes updateDraftTransactionTypes(Set<DraftTransactionType> updates) {
+        this.draftTransactionTypes.clear();
+        this.draftTransactionTypes.addAll(updates);
 
-        return draftTransactionTypes;
+        return this;
     }
 
     public Set<String> createStringSet(Set<DraftTransactionType> transactions) {

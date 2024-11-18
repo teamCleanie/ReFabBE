@@ -58,9 +58,6 @@ public class Post extends BaseEntity {
     }
 
     public void updatePost(PostRequest request, Photos photos) {
-        if (!validatePost(request)) {
-            throw new BadRequestException(ExceptionCode.INVALID_POST_REQUEST);
-        }
         TransactionTypes transactions = this.getTransactionTypes();
         this.fabricType = request.fabricType();
         this.title = request.title();
@@ -69,18 +66,6 @@ public class Post extends BaseEntity {
         this.content = request.content();
         this.transactionTypes = transactions.updateTransactionTypes(request.transactionTypes());
         this.photos = photos;
-    }
-
-    public boolean validatePost(PostRequest request) {
-        return Stream.of(
-                request.postType().getPostEngName(),
-                request.fabricType().getFabricEngName(),
-                request.title(),
-                request.unit(),
-                request.price(),
-                request.content()
-        ).noneMatch(String::isBlank) && !request.photoIds().isEmpty()
-                && !request.transactionTypes().isEmpty();
     }
 
     public PostResponse toPostResponse() {

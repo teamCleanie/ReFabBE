@@ -30,7 +30,7 @@ public class PostService {
     public PostResponse viewPost(Long postId){
         Post post = findPostOrThrowException(postId);
 
-        return post.toPostResponse(post);
+        return post.toPostResponse();
     }
 
     @Transactional(readOnly = true)
@@ -46,7 +46,7 @@ public class PostService {
 
         photosManager.addPostIdToPhotoList(photoList, savedPost.getId());
 
-        return savedPost.toPostIdResponse(savedPost);
+        return savedPost.toPostIdResponse();
     }
 
     @Transactional
@@ -54,12 +54,12 @@ public class PostService {
         Post post = postRepository.save(Post.toPost(request));
         DraftPost draftPost = draftPostManager.findDraftById(draftId);
 
-        Post postWithPhoto = movePhotosFromDraftToPost(draftPost, post);
+        movePhotosFromDraftToPost(draftPost, post);
 
-        return post.toPostIdResponse(postWithPhoto);
+        return post.toPostIdResponse();
     }
 
-    public Post movePhotosFromDraftToPost(DraftPost draftPost, Post post) {
+    public void movePhotosFromDraftToPost(DraftPost draftPost, Post post) {
         List<Long> photoIds = draftPost.getDraftPhotos().getPhotoList().stream()
                 .map(Photo::getId).toList();
 
@@ -68,19 +68,18 @@ public class PostService {
             photosManager.removeDraftIdFromPhotoList(photos);
             photosManager.addPostIdToPhotoList(photos, post.getId());
         }
-        return post;
     }
 
     @Transactional
     public PostIdResponse updatePost(PostRequest request, Long postId){
-        Post originalPost = findPostOrThrowException(postId);
+        Post post = findPostOrThrowException(postId);
 
-        List<Photo> updatedPhotos = photosManager.updatePostIds(originalPost.getId(), request.photoIds());
+        List<Photo> updatedPhotos = photosManager.updatePostIds(post.getId(), request.photoIds());
         Photos photos = new Photos(updatedPhotos);
 
-        Post editedPost = originalPost.updatePost(originalPost, request, photos);
+        post.updatePost(request, photos);
 
-        return editedPost.toPostIdResponse(editedPost);
+        return post.toPostIdResponse();
     }
 
     @Transactional

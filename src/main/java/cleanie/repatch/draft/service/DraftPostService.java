@@ -27,7 +27,7 @@ public class DraftPostService {
     public DraftPostResponse viewDraftPost(Long draftId) {
         DraftPost draftPost = findDraftPostOrThrowException(draftId);
 
-        return draftPost.toDraftResponse(draftPost);
+        return draftPost.toDraftResponse();
     }
 
     @Transactional(readOnly = true)
@@ -43,18 +43,18 @@ public class DraftPostService {
 
         photosManager.addDraftIdToPhotoList(photoList, draftPost.getId());
 
-        return draftPost.toDraftIdResponse(draftPost);
+        return draftPost.toDraftIdResponse();
     }
 
     @Transactional
     public DraftPostIdResponse updateDraftPost(DraftPostRequest request, Long draftId) {
-        DraftPost originalDraftPost = findDraftPostOrThrowException(draftId);
-        List<Photo> updatedPhotos = photosManager.updateDraftIds(originalDraftPost.getId(), request.photoIds());
+        DraftPost draftPost = findDraftPostOrThrowException(draftId);
+        List<Photo> updatedPhotos = photosManager.updateDraftIds(draftPost.getId(), request.photoIds());
         DraftPhotos photos = new DraftPhotos(updatedPhotos);
 
-        DraftPost updatedDraftPost = originalDraftPost.updateDraft(originalDraftPost, request, photos);
+        draftPost.updateDraft(request, photos);
 
-        return updatedDraftPost.toDraftIdResponse(updatedDraftPost);
+        return draftPost.toDraftIdResponse();
     }
 
     @Transactional

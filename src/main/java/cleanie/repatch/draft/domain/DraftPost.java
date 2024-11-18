@@ -56,35 +56,33 @@ public class DraftPost extends BaseEntity {
                 .build();
     }
 
-    public DraftPost updateDraft(DraftPost draftPost, DraftPostRequest request, DraftPhotos photos) {
-        DraftTransactionTypes draftTransactions = draftPost.draftTransactionTypes;
+    public void updateDraft(DraftPostRequest request, DraftPhotos photos) {
+        DraftTransactionTypes draftTransactions = this.draftTransactionTypes;
 
-        draftPost.fabricType = request.fabricType();
-        draftPost.title = request.title();
-        draftPost.unit = request.unit();
-        draftPost.price = request.price();
-        draftPost.content = request.content();
-        draftPost.draftTransactionTypes = draftTransactions.updateDraftTransactionTypes(
-                draftTransactions, request.draftTransactionTypes());
-        draftPost.draftPhotos = photos;
-
-        return draftPost;
+        this.fabricType = request.fabricType();
+        this.title = request.title();
+        this.unit = request.unit();
+        this.price = request.price();
+        this.content = request.content();
+        this.draftTransactionTypes = draftTransactions.updateDraftTransactionTypes(
+                request.draftTransactionTypes());
+        this.draftPhotos = photos;
     }
 
-    public DraftPostResponse toDraftResponse(DraftPost draftPost) {
-        DraftTransactionTypes draftTransactions = draftPost.getDraftTransactionTypes();
+    public DraftPostResponse toDraftResponse() {
+        DraftTransactionTypes draftTransactions = this.getDraftTransactionTypes();
 
         return new DraftPostResponse(
-                draftPost.getId(), draftPost.getPostType(),
-                draftPost.getTitle(), draftPost.getFabricType(),
-                draftPost.getUnit(), draftPost.getPrice(),
-                draftPost.getContent(),
+                this.id, this.postType,
+                this.title, this.fabricType,
+                this.unit, this.price,
+                this.content,
                 draftTransactions.createStringSet(draftTransactions.getDraftTransactionTypes()),
-                DraftPhotos.toPhotoResponses(draftPost.getDraftPhotos()),
-                draftPost.getCreatedAt(), draftPost.getModifiedAt());
+                DraftPhotos.toPhotoResponses(this.draftPhotos),
+                this.getCreatedAt(), this.getModifiedAt());
     }
 
-    public DraftPostIdResponse toDraftIdResponse(DraftPost draftPost) {
-        return new DraftPostIdResponse(draftPost.getId());
+    public DraftPostIdResponse toDraftIdResponse() {
+        return new DraftPostIdResponse(this.id);
     }
 }

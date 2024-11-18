@@ -3,7 +3,6 @@ package cleanie.repatch.post.domain;
 import cleanie.repatch.common.domain.BaseEntity;
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.photo.domain.Photos;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
@@ -58,33 +57,18 @@ public class Post extends BaseEntity {
                 .build();
     }
 
-    public Post updatePost(Post post, PostRequest request, Photos photos) {
+    public void updatePost(PostRequest request, Photos photos) {
         if (!validatePost(request)) {
             throw new BadRequestException(ExceptionCode.INVALID_POST_REQUEST);
         }
-        TransactionTypes transactions = post.getTransactionTypes();
-        post.fabricType = request.fabricType();
-        post.title = request.title();
-        post.unit = request.unit();
-        post.price = request.price();
-        post.content = request.content();
-        post.transactionTypes = transactions.updateTransactionTypes(transactions, request.transactionTypes());
-        post.photos = photos;
-
-        return post;
-    }
-
-    public static Post publishDraft(DraftPost draftPost) {
-        return Post.builder()
-                .postType(draftPost.getPostType())
-                .fabricType(draftPost.getFabricType())
-                .title(draftPost.getTitle())
-                .unit(draftPost.getUnit())
-                .price(draftPost.getPrice())
-                .content(draftPost.getContent())
-                .transactionTypes(draftPost.getDraftTransactionTypes().toTransactionTypes())
-                .photos(new Photos())
-                .build();
+        TransactionTypes transactions = this.getTransactionTypes();
+        this.fabricType = request.fabricType();
+        this.title = request.title();
+        this.unit = request.unit();
+        this.price = request.price();
+        this.content = request.content();
+        this.transactionTypes = transactions.updateTransactionTypes(request.transactionTypes());
+        this.photos = photos;
     }
 
     public boolean validatePost(PostRequest request) {
@@ -99,19 +83,19 @@ public class Post extends BaseEntity {
                 && !request.transactionTypes().isEmpty();
     }
 
-    public PostResponse toPostResponse(Post post) {
-        TransactionTypes transactions = post.getTransactionTypes();
+    public PostResponse toPostResponse() {
+        TransactionTypes transactions = this.getTransactionTypes();
 
         return new PostResponse(
-                post.getId(), post.getPostType(),
-                post.getTitle(), post.getFabricType(),
-                post.getUnit(), post.getPrice(),
-                post.getContent(), transactions.createStringSet(transactions.getTransactionTypes()),
-                Photos.toPhotoResponses(post.getPhotos()),
-                post.getCreatedAt(), post.getModifiedAt());
+                this.id, this.postType,
+                this.title, this.fabricType,
+                this.unit, this.price,
+                this.content, transactions.createStringSet(transactions.getTransactionTypes()),
+                Photos.toPhotoResponses(this.photos),
+                this.getCreatedAt(), this.getModifiedAt());
     }
 
-    public PostIdResponse toPostIdResponse(Post post) {
-        return new PostIdResponse(post.getId());
+    public PostIdResponse toPostIdResponse() {
+        return new PostIdResponse(this.id);
     }
 }

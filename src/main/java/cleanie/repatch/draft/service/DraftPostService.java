@@ -1,6 +1,6 @@
 package cleanie.repatch.draft.service;
 
-import cleanie.repatch.common.exception.BadRequestException;
+import cleanie.repatch.common.exception.EntityNotFoundException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.draft.model.request.DraftPostRequest;
@@ -33,7 +33,7 @@ public class DraftPostService {
     @Transactional(readOnly = true)
     public DraftPost findDraftPostOrThrowException(Long draftId) {
         return draftPostRepository.findById(draftId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND));
+                () -> new EntityNotFoundException(ExceptionCode.NOT_FOUND));
     }
 
     @Transactional
@@ -62,7 +62,7 @@ public class DraftPostService {
         draftPostRepository.findById(draftId).ifPresentOrElse(
                 draftPostRepository::delete,
                 () -> {
-                    throw new BadRequestException(ExceptionCode.NOT_FOUND);
+                    throw new EntityNotFoundException(ExceptionCode.NOT_FOUND);
                 }
         );
     }

@@ -1,6 +1,6 @@
 package cleanie.repatch.post.component;
 
-import cleanie.repatch.common.exception.BadRequestException;
+import cleanie.repatch.common.exception.EntityNotFoundException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.draft.repository.DraftPostRepository;
@@ -17,7 +17,7 @@ public class DraftPostManager {
     @Transactional
     public DraftPost findDraftById(Long draftId) {
         return draftPostRepository.findById(draftId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
+                () -> new EntityNotFoundException(ExceptionCode.NOT_FOUND));
     }
 
     @Transactional

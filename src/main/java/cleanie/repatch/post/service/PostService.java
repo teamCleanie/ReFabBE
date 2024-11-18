@@ -1,6 +1,6 @@
 package cleanie.repatch.post.service;
 
-import cleanie.repatch.common.exception.BadRequestException;
+import cleanie.repatch.common.exception.EntityNotFoundException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.draft.domain.DraftPost;
 import cleanie.repatch.photo.domain.PostPhoto;
@@ -36,7 +36,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post findPostOrThrowException(Long postId) {
         return postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND));
+                () -> new EntityNotFoundException(ExceptionCode.NOT_FOUND));
     }
 
     @Transactional
@@ -87,7 +87,7 @@ public class PostService {
         postRepository.findById(postId).ifPresentOrElse(
                 postRepository::delete,
                 () -> {
-                    throw new BadRequestException(ExceptionCode.NOT_FOUND);
+                    throw new EntityNotFoundException(ExceptionCode.NOT_FOUND);
                 }
         );
     }

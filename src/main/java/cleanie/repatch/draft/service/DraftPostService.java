@@ -7,7 +7,7 @@ import cleanie.repatch.draft.model.request.DraftPostRequest;
 import cleanie.repatch.draft.model.response.DraftPostResponse;
 import cleanie.repatch.photo.component.PhotosManager;
 import cleanie.repatch.photo.domain.DraftPhotos;
-import cleanie.repatch.photo.domain.Photo;
+import cleanie.repatch.photo.domain.PostPhoto;
 import cleanie.repatch.draft.model.response.DraftPostIdResponse;
 import cleanie.repatch.draft.repository.DraftPostRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,15 +33,15 @@ public class DraftPostService {
     @Transactional(readOnly = true)
     public DraftPost findDraftPostOrThrowException(Long draftId) {
         return draftPostRepository.findById(draftId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND));
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND));
     }
 
     @Transactional
     public DraftPostIdResponse saveDraftPost(DraftPostRequest request) {
-        List<Photo> photoList = photosManager.getPhotoListFromIds(request.photoIds());
+        List<PostPhoto> postPhotoList = photosManager.getPhotoListFromIds(request.photoIds());
         DraftPost draftPost = draftPostRepository.save(DraftPost.toNewDraft(request));
 
-        photosManager.addDraftIdToPhotoList(photoList, draftPost.getId());
+        photosManager.addDraftIdToPhotoList(postPhotoList, draftPost.getId());
 
         return draftPost.toDraftIdResponse();
     }
@@ -49,8 +49,8 @@ public class DraftPostService {
     @Transactional
     public DraftPostIdResponse updateDraftPost(DraftPostRequest request, Long draftId) {
         DraftPost draftPost = findDraftPostOrThrowException(draftId);
-        List<Photo> updatedPhotos = photosManager.updateDraftIds(draftPost.getId(), request.photoIds());
-        DraftPhotos photos = new DraftPhotos(updatedPhotos);
+        List<PostPhoto> updatedPostPhotos = photosManager.updateDraftIds(draftPost.getId(), request.photoIds());
+        DraftPhotos photos = new DraftPhotos(updatedPostPhotos);
 
         draftPost.updateDraft(request, photos);
 
@@ -62,7 +62,7 @@ public class DraftPostService {
         draftPostRepository.findById(draftId).ifPresentOrElse(
                 draftPostRepository::delete,
                 () -> {
-                    throw new BadRequestException(ExceptionCode.DRAFT_NOT_FOUND);
+                    throw new BadRequestException(ExceptionCode.NOT_FOUND);
                 }
         );
     }

@@ -13,10 +13,10 @@ import java.util.List;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class DraftPhotos {
+public class PostPhotos {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "draftId")
+    @JoinColumn(name = "postId")
     private List<PostPhoto> postPhotoList;
 
     public List<PostPhoto> getPostPhotoList() {
@@ -34,10 +34,9 @@ public class DraftPhotos {
         getPostPhotoList().addAll(postPhotos);
     }
 
-    public static List<PostPhotoResponse> toPhotoResponses(DraftPhotos draftPhotos) {
-        return draftPhotos.getPostPhotoList().stream()
+    public static List<PostPhotoResponse> toPhotoResponses(PostPhotos postPhotos) {
+        return postPhotos.getPostPhotoList().stream()
                 .map(photo -> new PostPhotoResponse(photo.getId(), photo.getImageUrl()))
                 .toList();
     }
 }
-

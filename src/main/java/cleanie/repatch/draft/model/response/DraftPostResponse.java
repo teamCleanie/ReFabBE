@@ -1,6 +1,6 @@
 package cleanie.repatch.draft.model.response;
 
-import cleanie.repatch.photo.model.response.PhotoResponse;
+import cleanie.repatch.photo.model.response.PostPhotoResponse;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 
@@ -17,7 +17,7 @@ public record DraftPostResponse(
         String price,
         String content,
         Set<String> draftTransactionTypes,
-        List<PhotoResponse> photos,
+        List<PostPhotoResponse> photos,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {

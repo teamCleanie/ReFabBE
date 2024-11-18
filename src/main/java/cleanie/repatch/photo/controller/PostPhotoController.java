@@ -2,9 +2,9 @@ package cleanie.repatch.photo.controller;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.photo.model.response.PhotoResponse;
-import cleanie.repatch.photo.model.request.PhotoUploadRequest;
-import cleanie.repatch.photo.service.PhotoService;
+import cleanie.repatch.photo.model.response.PostPhotoResponse;
+import cleanie.repatch.photo.model.request.PostPhotoUploadRequest;
+import cleanie.repatch.photo.service.PostPhotoService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,15 +17,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/photo")
 @RequiredArgsConstructor
-public class PhotoController {
+public class PostPhotoController {
 
-    private final PhotoService photoService;
+    private final PostPhotoService postPhotoService;
 
     @Operation(summary = "사진 업로드", description = "사진을 s3에 업로드하고, 사진 id와 url을 반환합니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PhotoResponse>> uploadPhotos(
-            @ModelAttribute PhotoUploadRequest request) throws IOException {
-        List<PhotoResponse> responses = photoService.uploadAndSavePhotos(request);
+    public ResponseEntity<List<PostPhotoResponse>> uploadPhotos(
+            @ModelAttribute PostPhotoUploadRequest request) throws IOException {
+        List<PostPhotoResponse> responses = postPhotoService.uploadAndSavePhotos(request);
         return ResponseEntity.ok(responses);
     }
 
@@ -33,7 +33,7 @@ public class PhotoController {
     @DeleteMapping("/{photoId}")
     public ResponseEntity<Void> deletePhoto(
             @PathVariable(name = "photoId") Long photoId){
-        if (photoService.deletePhotoIfExistsById(photoId)){
+        if (postPhotoService.deletePhotoIfExistsById(photoId)){
             return ResponseEntity.ok(null);
         } else {
             throw new BadRequestException(ExceptionCode.FILE_NOT_FOUND);

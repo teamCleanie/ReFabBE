@@ -4,7 +4,7 @@ import cleanie.repatch.common.domain.BaseEntity;
 import cleanie.repatch.common.exception.FileTypeMismatchException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.photo.domain.enums.PhotoExtension;
-import cleanie.repatch.photo.model.response.PhotoResponse;
+import cleanie.repatch.photo.model.response.PostPhotoResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Photo extends BaseEntity {
+public class PostPhoto extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +24,9 @@ public class Photo extends BaseEntity {
     private Long postId;
     private Long draftId;
 
-    public static Photo toPhoto(String imageUrl) {
+    public static PostPhoto toPhoto(String imageUrl) {
         if (validatePhotoUrl(imageUrl)) {
-            return new Photo(null, imageUrl, null, null);
+            return new PostPhoto(null, imageUrl, null, null);
         }
         throw new FileTypeMismatchException(ExceptionCode.FILE_TYPE_NOT_SUPPORTED);
     }
@@ -37,19 +37,19 @@ public class Photo extends BaseEntity {
                 .anyMatch(ex -> extension.endsWith(ex.getExtension()));
     }
 
-    public void addPostIdToPhoto(Photo photo, Long postId) {
-        photo.postId = postId;
+    public void addPostIdToPhoto(PostPhoto postPhoto, Long postId) {
+        postPhoto.postId = postId;
     }
 
-    public void addDraftIdToPhoto(Photo photo, Long draftId) {
-        photo.draftId = draftId;
+    public void addDraftIdToPhoto(PostPhoto postPhoto, Long draftId) {
+        postPhoto.draftId = draftId;
     }
 
-    public void removeDraftIdFromPhoto(Photo photo) {
-        photo.draftId = null;
+    public void removeDraftIdFromPhoto(PostPhoto postPhoto) {
+        postPhoto.draftId = null;
     }
 
-    public PhotoResponse toPhotoResponse(Photo photo) {
-        return new PhotoResponse(photo.getId(), photo.getImageUrl());
+    public PostPhotoResponse toPhotoResponse(PostPhoto postPhoto) {
+        return new PostPhotoResponse(postPhoto.getId(), postPhoto.getImageUrl());
     }
 }

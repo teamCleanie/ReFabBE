@@ -4,6 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public record PhotoUploadRequest(
+public record PostPhotoUploadRequest(
         List<MultipartFile> photos
 ) { }

@@ -1,6 +1,6 @@
 package cleanie.repatch.post.model.response;
 
-import cleanie.repatch.photo.model.response.PhotoResponse;
+import cleanie.repatch.photo.model.response.PostPhotoResponse;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public record PostResponse(
         String price,
         String content,
         Set<String> transactionTypes,
-        List<PhotoResponse> photos,
+        List<PostPhotoResponse> photos,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {}

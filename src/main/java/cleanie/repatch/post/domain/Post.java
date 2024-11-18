@@ -1,9 +1,7 @@
 package cleanie.repatch.post.domain;
 
 import cleanie.repatch.common.domain.BaseEntity;
-import cleanie.repatch.common.exception.BadRequestException;
-import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.photo.domain.Photos;
+import cleanie.repatch.photo.domain.PostPhotos;
 import cleanie.repatch.post.domain.enums.FabricType;
 import cleanie.repatch.post.domain.enums.PostType;
 import cleanie.repatch.post.domain.enums.TransactionTypes;
@@ -13,8 +11,6 @@ import cleanie.repatch.post.model.response.PostResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.stream.Stream;
 
 @Entity
 @Getter
@@ -41,7 +37,7 @@ public class Post extends BaseEntity {
     private TransactionTypes transactionTypes;
 
     @Embedded
-    private Photos photos;
+    private PostPhotos postPhotos;
 
     public static Post toPost(PostRequest request) {
 
@@ -53,11 +49,11 @@ public class Post extends BaseEntity {
                 .price(request.price())
                 .content(request.content())
                 .transactionTypes(new TransactionTypes(request.transactionTypes()))
-                .photos(new Photos())
+                .postPhotos(new PostPhotos())
                 .build();
     }
 
-    public void updatePost(PostRequest request, Photos photos) {
+    public void updatePost(PostRequest request, PostPhotos postPhotos) {
         TransactionTypes transactions = this.getTransactionTypes();
         this.fabricType = request.fabricType();
         this.title = request.title();
@@ -65,7 +61,7 @@ public class Post extends BaseEntity {
         this.price = request.price();
         this.content = request.content();
         this.transactionTypes = transactions.updateTransactionTypes(request.transactionTypes());
-        this.photos = photos;
+        this.postPhotos = postPhotos;
     }
 
     public PostResponse toPostResponse() {
@@ -76,7 +72,7 @@ public class Post extends BaseEntity {
                 this.title, this.fabricType,
                 this.unit, this.price,
                 this.content, transactions.createStringSet(transactions.getTransactionTypes()),
-                Photos.toPhotoResponses(this.photos),
+                PostPhotos.toPhotoResponses(this.postPhotos),
                 this.getCreatedAt(), this.getModifiedAt());
     }
 

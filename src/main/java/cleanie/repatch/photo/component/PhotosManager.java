@@ -2,8 +2,8 @@ package cleanie.repatch.photo.component;
 
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
-import cleanie.repatch.photo.domain.Photo;
-import cleanie.repatch.photo.repository.PhotoRepository;
+import cleanie.repatch.photo.domain.PostPhoto;
+import cleanie.repatch.photo.repository.PostPhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,47 +13,47 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhotosManager {
 
-    private final PhotoRepository photoRepository;
+    private final PostPhotoRepository postPhotoRepository;
 
-    public List<Photo> getPhotoListFromIds(List<Long> photoIds) {
+    public List<PostPhoto> getPhotoListFromIds(List<Long> photoIds) {
 
         return photoIds.stream()
-                .map(id -> photoRepository.findById(id)
+                .map(id -> postPhotoRepository.findById(id)
                         .orElseThrow(() -> new BadRequestException(ExceptionCode.FILE_NOT_FOUND)))
                 .toList();
     }
 
-    public void addPostIdToPhotoList(List<Photo> photos, Long postId) {
-        photos.forEach(photo -> addPostIdToPhoto(photo, postId));
+    public void addPostIdToPhotoList(List<PostPhoto> postPhotos, Long postId) {
+        postPhotos.forEach(photo -> addPostIdToPhoto(photo, postId));
     }
 
-    public void addPostIdToPhoto(Photo photo, Long postId){
-        photo.addPostIdToPhoto(photo, postId);
+    public void addPostIdToPhoto(PostPhoto postPhoto, Long postId){
+        postPhoto.addPostIdToPhoto(postPhoto, postId);
     }
 
-    public void addDraftIdToPhotoList(List<Photo> photos, Long draftId) {
-        photos.forEach(photo -> addDraftIdToPhoto(photo, draftId));
+    public void addDraftIdToPhotoList(List<PostPhoto> postPhotos, Long draftId) {
+        postPhotos.forEach(photo -> addDraftIdToPhoto(photo, draftId));
     }
 
-    public void addDraftIdToPhoto(Photo photo, Long draftId) {
-        photo.addDraftIdToPhoto(photo, draftId);
+    public void addDraftIdToPhoto(PostPhoto postPhoto, Long draftId) {
+        postPhoto.addDraftIdToPhoto(postPhoto, draftId);
     }
 
-    public void removeDraftIdFromPhotoList(List<Photo> photos) {
-        photos.forEach(photo -> removeDraftIdFromPhoto(photo));
+    public void removeDraftIdFromPhotoList(List<PostPhoto> postPhotos) {
+        postPhotos.forEach(photo -> removeDraftIdFromPhoto(photo));
     }
 
-    public void removeDraftIdFromPhoto(Photo photo) {
-        photo.removeDraftIdFromPhoto(photo);
+    public void removeDraftIdFromPhoto(PostPhoto postPhoto) {
+        postPhoto.removeDraftIdFromPhoto(postPhoto);
     }
 
-    public List<Photo> updatePostIds(Long postId, List<Long> photoIds) {
+    public List<PostPhoto> updatePostIds(Long postId, List<Long> photoIds) {
         return getPhotoListFromIds(photoIds).stream()
                 .peek(photo -> addPostIdToPhoto(photo, postId))
                 .toList();
     }
 
-    public List<Photo> updateDraftIds(Long draftId, List<Long> photoIds) {
+    public List<PostPhoto> updateDraftIds(Long draftId, List<Long> photoIds) {
         return getPhotoListFromIds(photoIds).stream()
                 .peek(photo -> addDraftIdToPhoto(photo, draftId))
                 .toList();

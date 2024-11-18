@@ -3,9 +3,9 @@ package cleanie.repatch.post.service;
 import cleanie.repatch.common.exception.BadRequestException;
 import cleanie.repatch.common.exception.model.ExceptionCode;
 import cleanie.repatch.draft.domain.DraftPost;
-import cleanie.repatch.photo.domain.Photo;
+import cleanie.repatch.photo.domain.PostPhoto;
 import cleanie.repatch.photo.component.PhotosManager;
-import cleanie.repatch.photo.domain.Photos;
+import cleanie.repatch.photo.domain.PostPhotos;
 import cleanie.repatch.post.component.DraftPostManager;
 import cleanie.repatch.post.domain.Post;
 import cleanie.repatch.post.model.response.PostIdResponse;
@@ -36,15 +36,15 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post findPostOrThrowException(Long postId) {
         return postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.POST_NOT_FOUND));
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND));
     }
 
     @Transactional
     public PostIdResponse savePost(PostRequest request){
-        List<Photo> photoList = photosManager.getPhotoListFromIds(request.photoIds());
+        List<PostPhoto> postPhotoList = photosManager.getPhotoListFromIds(request.photoIds());
         Post savedPost = postRepository.save(Post.toPost(request));
 
-        photosManager.addPostIdToPhotoList(photoList, savedPost.getId());
+        photosManager.addPostIdToPhotoList(postPhotoList, savedPost.getId());
 
         return savedPost.toPostIdResponse();
     }
@@ -60,13 +60,13 @@ public class PostService {
     }
 
     public void movePhotosFromDraftToPost(DraftPost draftPost, Post post) {
-        List<Long> photoIds = draftPost.getDraftPhotos().getPhotoList().stream()
-                .map(Photo::getId).toList();
+        List<Long> photoIds = draftPost.getDraftPhotos().getPostPhotoList().stream()
+                .map(PostPhoto::getId).toList();
 
         if (!photoIds.isEmpty()) {
-            List<Photo> photos = photosManager.getPhotoListFromIds(photoIds);
-            photosManager.removeDraftIdFromPhotoList(photos);
-            photosManager.addPostIdToPhotoList(photos, post.getId());
+            List<PostPhoto> postPhotos = photosManager.getPhotoListFromIds(photoIds);
+            photosManager.removeDraftIdFromPhotoList(postPhotos);
+            photosManager.addPostIdToPhotoList(postPhotos, post.getId());
         }
     }
 
@@ -74,10 +74,10 @@ public class PostService {
     public PostIdResponse updatePost(PostRequest request, Long postId){
         Post post = findPostOrThrowException(postId);
 
-        List<Photo> updatedPhotos = photosManager.updatePostIds(post.getId(), request.photoIds());
-        Photos photos = new Photos(updatedPhotos);
+        List<PostPhoto> updatedPostPhotos = photosManager.updatePostIds(post.getId(), request.photoIds());
+        PostPhotos postPhotos = new PostPhotos(updatedPostPhotos);
 
-        post.updatePost(request, photos);
+        post.updatePost(request, postPhotos);
 
         return post.toPostIdResponse();
     }
@@ -87,7 +87,7 @@ public class PostService {
         postRepository.findById(postId).ifPresentOrElse(
                 postRepository::delete,
                 () -> {
-                    throw new BadRequestException(ExceptionCode.POST_NOT_FOUND);
+                    throw new BadRequestException(ExceptionCode.NOT_FOUND);
                 }
         );
     }
